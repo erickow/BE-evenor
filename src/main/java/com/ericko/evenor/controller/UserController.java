@@ -26,9 +26,12 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/")
-    @ResponseStatus()
-    public List<User> getUser() {
-        return userService.getUser();
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "get all user", notes = "List of all user")
+    public @ResponseBody List<User> getUser(HttpServletRequest request, HttpServletResponse response) {
+        List<User> result = userService.getUser();
+        checkResourceFound(result);
+        return result;
     }
 
     @GetMapping("/{id}")
@@ -45,28 +48,28 @@ public class UserController {
     }
 
     @PostMapping("/")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "user object", notes = "create new user")
     public User createUser(
-            @RequestBody User user
+            @RequestBody User user,
+            HttpServletRequest request, HttpServletResponse response
     ) {
         User result = userService.createUser(user);
         return result;
     }
 
     @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "user object", notes = "updating user data by id")
     public User updateUser(
+            @ApiParam(value = "the user id")
             @PathVariable("id") String id,
-            @RequestBody User user
+            @RequestBody User user,
+            HttpServletRequest request, HttpServletResponse response
     ) {
         User result = userService.getUser(id);
-        try {
+        checkResourceFound(result);
 
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            System.out.println(e.getMessage());
-        } catch (DataIntegrityViolationException e) {
-            e.printStackTrace();
-            System.out.println("Duplicated course code");
-        }
 
         return result;
     }
@@ -84,13 +87,13 @@ public class UserController {
         return userService.searchByName(name);
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(DataIntegrityViolationException.class)
     public
     @ResponseBody
     ResponseWrapper handleDuplicateEmail(DataIntegrityViolationException ex, WebRequest request, HttpServletResponse response) {
         //log.info("Converting Data Store exception to RestResponse : " + ex.getMessage());
 
-        return new ResponseWrapper(ex , "Datamu gak oleh kembar blog.");
+        return new ResponseWrapper(ex , "Data sama / constraint");
     }
 }

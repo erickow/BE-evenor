@@ -7,10 +7,10 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.annotation.ManagedBean;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -18,7 +18,8 @@ public class User {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
-    private String id;
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID id;
     @Column(nullable = false)
     @NotNull
     @NotBlank
@@ -34,7 +35,7 @@ public class User {
     private String password;
 
     private String photo;
-    @ManyToMany
+    @OneToMany(targetEntity=Role.class,fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     private List<Role> role;
 
