@@ -1,4 +1,4 @@
-package com.ericko.evenor.service;
+package com.ericko.evenor.service.user;
 
 import com.ericko.evenor.entity.User;
 import org.springframework.validation.annotation.Validated;

@@ -15,27 +15,31 @@ import java.util.UUID;
 @Entity
 @Data
 public class User {
+
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
+
     @Column(nullable = false)
     @NotNull
     @NotBlank
     private String name;
+
     @Column(nullable = false, unique = true)
     @NotNull
     @NotBlank
     @Email
     private String email;
+
     @Column(nullable = false)
     @NotNull
     @NotBlank
     private String password;
 
     private String photo;
-    @OneToMany(targetEntity=Role.class,fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = Role.class, fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     private List<Role> role;
 

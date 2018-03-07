@@ -10,7 +10,7 @@ INSERT INTO role VALUES(
 
 INSERT INTO role VALUES(
   unhex(replace(uuid(), '-', '')),
-  "member member","member"
+  "volunter member","volunter"
 );
 
 INSERT INTO user VALUES(

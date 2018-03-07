@@ -1,4 +1,4 @@
-package com.ericko.evenor.service;
+package com.ericko.evenor.service.user;
 
 import com.ericko.evenor.entity.User;
 import com.ericko.evenor.repository.UserRepository;
@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
+
 @Service
 public class UserServiceImpl implements UserService{
 
@@ -34,7 +36,8 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void deleteUser(String id) {
-        userRepository.delete(id);
+        UUID uid = UUID.fromString(id);
+        userRepository.delete(uid);
     }
 
     @Override
