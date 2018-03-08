@@ -1,21 +1,22 @@
 package com.ericko.evenor.entity;
 
 import lombok.Data;
+import lombok.NonNull;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Data
-public class User {
-
+public class Event {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
@@ -27,22 +28,28 @@ public class User {
     @NotBlank
     private String name;
 
-    @Column(nullable = false, unique = true)
-    @NotNull
+    @Column(nullable = false)
     @NotBlank
-    @Email
-    private String email;
+    @NonNull
+    private String description;
 
     @Column(nullable = false)
-    @NotNull
+    @NonNull
     @NotBlank
-    private String password;
+    @DateTimeFormat
+    private Date startDate;
 
-    @Column
-    private String photo;
+    @Column(nullable = false)
+    @NonNull
+    @NotBlank
+    @DateTimeFormat
+    private Date endDate;
 
-    @ManyToMany(targetEntity = Role.class, fetch = FetchType.EAGER)
+    @ManyToMany(targetEntity = User.class, fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.NO_ACTION)
-    private List<Role> role;
+    private List<User> participant;
+
+
+
 
 }

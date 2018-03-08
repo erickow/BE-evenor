@@ -5,17 +5,18 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 
 @Validated
 public interface RoleService {
 
     List<Role> getRole();
 
-    Role getRole(String id);
+    Role getRole(UUID id);
 
     Role createRole(@Valid Role role);
 
     Role updateRole(@Valid Role role);
 
-    void deleteRole(String id);
+    void deleteRole(UUID id);
 }

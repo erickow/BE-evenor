@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.UUID;
 
 import static com.ericko.evenor.util.response.ResponseHandler.checkResourceFound;
 
@@ -29,6 +30,20 @@ public class RoleController {
             HttpServletRequest request, HttpServletResponse response
     ) {
         List<Role> result = roleService.getRole();
+        checkResourceFound(result);
+        return result;
+    }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "role id", notes = "getting role by id")
+    public @ResponseBody
+    Role getRole(
+            @ApiParam(value = "role id")
+            @PathVariable("id") UUID id,
+            HttpServletRequest request, HttpServletResponse response
+    ){
+        Role result = roleService.getRole(id);
         checkResourceFound(result);
         return result;
     }
@@ -65,8 +80,7 @@ public class RoleController {
     public @ResponseBody
     void deleteRole(
             @ApiParam(value = "user id and object")
-            @PathVariable("id") String id,
-            @RequestBody Role role
+            @PathVariable("id") UUID id
     ) {
         roleService.deleteRole(id);
     }

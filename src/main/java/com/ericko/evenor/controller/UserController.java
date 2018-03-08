@@ -14,6 +14,7 @@ import org.springframework.web.context.request.WebRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.UUID;
 
 import static com.ericko.evenor.util.response.ResponseHandler.checkResourceFound;
 
@@ -38,7 +39,7 @@ public class UserController {
     public @ResponseBody
     User getUser(
             @ApiParam(value = "the id of user")
-            @PathVariable String id,
+            @PathVariable UUID id,
             HttpServletRequest request, HttpServletResponse response
     ) {
         User result = userService.getUser(id);
@@ -76,7 +77,7 @@ public class UserController {
     public @ResponseBody
     void deleteUser(
             @ApiParam(value = "the user id")
-            @PathVariable("id") String id,
+            @PathVariable("id") UUID id,
             HttpServletRequest request, HttpServletResponse response
     ) {
         userService.deleteUser(id);

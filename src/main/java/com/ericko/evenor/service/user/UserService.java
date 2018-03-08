@@ -5,18 +5,19 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 
 @Validated
 public interface UserService {
     List<User> getUser();
 
-    User getUser(String id);
+    User getUser(UUID id);
 
     User createUser( @Valid User user);
 
     User updateUser( @Valid User user);
 
-    void deleteUser(String id);
+    void deleteUser(UUID id);
 
     List<User> searchByName(String name);
 }
