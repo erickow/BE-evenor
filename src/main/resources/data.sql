@@ -15,7 +15,7 @@ INSERT INTO role VALUES(
 
 INSERT INTO user VALUES(
   unhex(replace(uuid(), '-', '')),
-  "admin@mail.com","admin","admin","ini photo"
+  true,"admin@mail.com","admin","admin","ini photo"
 );
 
 

@@ -1,5 +1,6 @@
 package com.ericko.evenor.service.user;
 
+import com.ericko.evenor.entity.CustomUserDetails;
 import com.ericko.evenor.entity.User;
 import com.ericko.evenor.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,4 +44,6 @@ public class UserServiceImpl implements UserService{
     public List<User> searchByName(String name) {
         return userRepository.findAllByNameContains(name);
     }
+
+
 }

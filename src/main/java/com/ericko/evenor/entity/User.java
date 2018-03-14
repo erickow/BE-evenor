@@ -9,6 +9,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,6 +35,7 @@ public class User {
     private String email;
 
     @Column(nullable = false)
+    @Size(max = 32)
     @NotNull
     @NotBlank
     private String password;
@@ -41,8 +43,33 @@ public class User {
     @Column
     private String photo;
 
+    @Column(nullable = false)
+    private Boolean active;
+
     @ManyToMany(targetEntity = Role.class, fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     private List<Role> role;
 
+    public User() {
+    }
+
+    public User(UUID id) {
+        this.id = id;
+    }
+
+    public User(UUID id, Boolean active, String name, String email, String password) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.active = active;
+    }
+
+    public User(User user) {
+        this.id = user.id;
+        this.name = user.name;
+        this.email = user.email;
+        this.password = user.password;
+        this.active = active;
+    }
 }

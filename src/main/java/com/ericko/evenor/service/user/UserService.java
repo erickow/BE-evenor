@@ -20,4 +20,5 @@ public interface UserService {
     void deleteUser(UUID id);
 
     List<User> searchByName(String name);
+
 }

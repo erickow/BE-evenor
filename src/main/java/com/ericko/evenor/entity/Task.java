@@ -1,5 +1,6 @@
 package com.ericko.evenor.entity;
 
+import com.sun.javafx.font.freetype.FTFactory;
 import lombok.Data;
 import lombok.NonNull;
 import org.hibernate.annotations.GenericGenerator;
@@ -7,7 +8,6 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.testng.annotations.ObjectFactory;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -17,7 +17,7 @@ import java.util.UUID;
 
 @Entity
 @Data
-public class Event {
+public class Task {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
@@ -40,14 +40,14 @@ public class Event {
     @DateTimeFormat
     private Date startDate;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     @NonNull
     @NotBlank
     @DateTimeFormat
     private Date endDate;
 
-    @OneToMany(targetEntity = User.class, fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = Event.class, fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.NO_ACTION)
-    private List<User> comittee;
+    private Event event;
 
 }

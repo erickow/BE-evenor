@@ -1,7 +1,7 @@
 package com.ericko.evenor.controller;
 
-import com.ericko.evenor.entity.Event;
-import com.ericko.evenor.service.event.EventService;
+import com.ericko.evenor.entity.Task;
+import com.ericko.evenor.service.Task.TaskService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,72 +16,68 @@ import java.util.UUID;
 import static com.ericko.evenor.util.response.ResponseHandler.checkResourceFound;
 
 @RestController
-@RequestMapping("/event")
-public class EventController {
-
+@RequestMapping("/task")
+public class TaskController {
     @Autowired
-    private EventService eventService;
+    private TaskService taskService;
 
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "all event data", notes = "getting all event")
+    @ApiOperation(value = "get all task", notes = "List of all task")
     public @ResponseBody
-    List<Event> getEvent(
-            HttpServletRequest request,HttpServletResponse response
-    ){
-        List<Event> result = eventService.getEvent();
+    List<Task> getTask(HttpServletRequest request, HttpServletResponse response) {
+        List<Task> result = taskService.getTask();
+        checkResourceFound(result);
         return result;
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "event data", notes = "getting event data by id")
+    @ApiOperation(value = "get task by id", notes = "the task is search by id")
     public @ResponseBody
-    Event getEvent(
-            @ApiParam(value = "event id")
-            @PathVariable("id")UUID id,
-            @RequestBody Event event,
+    Task getTask(
+            @ApiParam(value = "the id of task")
+            @PathVariable UUID id,
             HttpServletRequest request, HttpServletResponse response
-    ){
-        Event result = eventService.getEvent(id);
+    ) {
+        Task result = taskService.getTask(id);
         checkResourceFound(result);
         return result;
     }
 
     @PostMapping("/")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "event data", notes = "create new event")
+    @ApiOperation(value = "task object", notes = "create new task")
     public @ResponseBody
-    Event createEvent(
-            @RequestBody Event event,
+    Task createTask(
+            @RequestBody Task task,
             HttpServletRequest request, HttpServletResponse response
     ) {
-        Event result = eventService.createEvent(event);
+        Task result = taskService.createTask(task);
         return result;
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "event object", notes = "updating event data by id")
-    public @ResponseBody
-    Event updateEvent(
-            @ApiParam(value = "the event id")
-            @PathVariable("id") UUID id,
-            @RequestBody Event event,
+    @ApiOperation(value = "task object", notes = "updating task data by id")
+    public @ResponseBody Task updateTask(
+            @ApiParam(value = "the task id")
+            @PathVariable("id") String id,
+            @RequestBody Task task,
             HttpServletRequest request, HttpServletResponse response
     ) {
-        return eventService.updateEvent(event);
+        return taskService.updateTask(task);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "event id" , notes = "delete event by id")
+    @ApiOperation(value = "task id" , notes = "delete task by id")
     public @ResponseBody
-    void deleteEvent(
-            @ApiParam(value = "the event id")
+    void deleteTask(
+            @ApiParam(value = "the task id")
             @PathVariable("id") UUID id,
             HttpServletRequest request, HttpServletResponse response
     ) {
-        eventService.deleteEvent(id);
+        taskService.deleteTask(id);
     }
 }
