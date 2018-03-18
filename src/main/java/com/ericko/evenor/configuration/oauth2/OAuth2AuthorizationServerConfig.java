@@ -21,6 +21,12 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 import java.util.Arrays;
 
+/**
+ * Configures the authorization server.
+ * The @EnableAuthorizationServer annotation is used to configure the OAuth 2.0 Authorization Server mechanism,
+ * together with any @Beans that implement AuthorizationServerConfigurer (there is a handy adapter implementation with empty methods).
+ */
+
 @Configuration
 @EnableAuthorizationServer
 public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
@@ -95,9 +101,11 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
                 .withClient(clientId)
                 .secret(clientSecret)
                 .authorizedGrantTypes(authorizedGrantTypes.split(","))
-                .scopes(scopes)
+                .authorities("ROLE_CLIENT","ROLE_TRUSTED_CLIENT")
+                .scopes(scopes.split(","))
                 .resourceIds(resourceId)
                 .accessTokenValiditySeconds(accessTokenValiditySeconds)
+                .secret("secret")
                 .redirectUris(redirectUris);
     }
 

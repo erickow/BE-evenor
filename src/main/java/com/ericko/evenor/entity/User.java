@@ -48,7 +48,7 @@ public class User {
 
     @ManyToMany(targetEntity = Role.class, fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.NO_ACTION)
-    private List<Role> role;
+    private List<Role> roles;
 
     public User() {
     }

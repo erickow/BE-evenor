@@ -1,27 +1,37 @@
 package com.ericko.evenor.entity;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.util.StringUtils;
 
 public class CustomUserDetails extends User implements UserDetails {
 
-    private List<String> userRoleList;
+    private Collection<? extends GrantedAuthority> authorities;
 
-    public CustomUserDetails(User user, List<String> userRoleList) {
+    public CustomUserDetails(User user, List<String> userRoles) {
         super(user);
-        this.userRoleList = userRoleList;
+        this.authorities = translate(user.getRoles());
+    }
+
+    private Collection<? extends GrantedAuthority> translate(List<Role> roles) {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        for (Role role : roles) {
+            String name = role.getName().toUpperCase();
+            //Make sure that all roles start with "ROLE_"
+            if (!name.startsWith("ROLE_"))
+                name = "ROLE_" + name;
+            authorities.add(new SimpleGrantedAuthority(name));
+        }
+        return authorities;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        String roles = StringUtils
-                .collectionToCommaDelimitedString(userRoleList);
-        return AuthorityUtils.commaSeparatedStringToAuthorityList(roles);
+        return authorities;
     }
 
     @Override

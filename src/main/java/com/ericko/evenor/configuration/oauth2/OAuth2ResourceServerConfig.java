@@ -58,7 +58,8 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
                 .httpBasic().disable()
                 .csrf().disable()
                 .authorizeRequests()
-                .anyRequest().authenticated()
+                .antMatchers("/","/home","/register","/login").permitAll()
+                .antMatchers("/private/**").authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER);
     }
