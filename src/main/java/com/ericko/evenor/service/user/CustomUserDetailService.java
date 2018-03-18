@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service("customUserDetailService")
+@Service
 public class CustomUserDetailService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    public CustomUserDetailService(@Qualifier("userRepository") UserRepository userRepository) {
+    public CustomUserDetailService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -27,7 +27,7 @@ public class CustomUserDetailService implements UserDetailsService {
             throw new UsernameNotFoundException(
                     "INVALID USER WITH LOGIN: " + userName);
         } else {
-            List<String> userRoles = userRepository.findByRole(user.getId());
+            List<String> userRoles = userRepository.findByRoles(user.getId());
             return new CustomUserDetails(user, userRoles);
         }
     }

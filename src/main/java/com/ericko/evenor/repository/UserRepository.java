@@ -9,15 +9,15 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
 
-@Repository("userRepository")
+@Repository
 public interface UserRepository extends JpaRepository<User,UUID> {
 
     List<User> findAllByNameContains(String name);
 
     User findByEmail(String email);
 
-//    @Query("select r.name " + "from User u, User.role r where  u.id=?1 ")
+//    @Query("select r.name " + "from User u, User.roles r where  u.id=?1 ")
     @Transactional
-    List<String> findByRole(UUID id);
+    List<String> findByRoles(UUID id);
 
 }

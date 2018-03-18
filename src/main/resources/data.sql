@@ -15,16 +15,16 @@ INSERT INTO role VALUES(
 
 INSERT INTO user VALUES(
   unhex(replace(uuid(), '-', '')),
-  true,"admin@mail.com","admin","admin","ini photo"
+  false,"admin@mail.com","admin","admin","ini photo"
 );
 
 
-INSERT INTO user_role VALUES (
+INSERT INTO user_roles VALUES (
   (select id from user where name='admin'),
   (select id from role where name='admin')
 );
 
-INSERT INTO user_role VALUES (
+INSERT INTO user_roles VALUES (
 (select id from user where name='admin'),
 (select id from role where name='member')
 );

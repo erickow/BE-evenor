@@ -19,32 +19,59 @@ import javax.sql.DataSource;
 @EnableJpaRepositories("com.ericko.evenor.repository")
 public class PersistenceConfig {
 
-    @Bean(name = "dataSourceMysqlSQLSettings")
-    @ConfigurationProperties(prefix = "datasource.mysql")
-    @Primary
-    public DataSource dataSourceMysql() {
-        return DataSourceBuilder.create().build();
-    }
-
-    @Bean(name = "transactionManager")
-    public JpaTransactionManager transactionManager(EntityManagerFactory emf) {
-        return new JpaTransactionManager(emf);
-    }
-
-    @Bean(name = "hibernateJpaVendorAdapter")
-    public JpaVendorAdapter jpaVendorAdapter() {
-        HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
-        jpaVendorAdapter.setDatabase(Database.MYSQL);
-        return jpaVendorAdapter;
-    }
-
-    @Bean(name = "entityManagerFactory")
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-        LocalContainerEntityManagerFactoryBean lemfb = new LocalContainerEntityManagerFactoryBean();
-        lemfb.setDataSource(dataSourceMysql());
-        lemfb.setJpaVendorAdapter(jpaVendorAdapter());
-        lemfb.setPersistenceUnitName("default");
-        lemfb.setPackagesToScan("com.ericko.evenor");
-        return lemfb;
-    }
+//    @Bean(name = "dataSourceMysqlSQLSettings")
+//    @ConfigurationProperties(prefix = "datasource.mysql")
+//    @Primary
+//    public DataSource dataSourceMysql() {
+//        return DataSourceBuilder.create().build();
+//    }
+//
+//    @Bean(name = "transactionManager")
+//    public JpaTransactionManager transactionManager(EntityManagerFactory emf) {
+//        return new JpaTransactionManager(emf);
+//    }
+//
+//    @Bean(name = "hibernateJpaVendorAdapter")
+//    public JpaVendorAdapter jpaVendorAdapter() {
+//        HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
+//        jpaVendorAdapter.setDatabase(Database.MYSQL);
+//        return jpaVendorAdapter;
+//    }
+//
+//    @Bean(name = "entityManagerFactory")
+//    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+//        LocalContainerEntityManagerFactoryBean lemfb = new LocalContainerEntityManagerFactoryBean();
+//        lemfb.setDataSource(dataSourceMysql());
+//        lemfb.setJpaVendorAdapter(jpaVendorAdapter());
+//        lemfb.setPersistenceUnitName("default");
+//        lemfb.setPackagesToScan("com.ericko.evenor");
+//        return lemfb;
+//    } @Bean(name = "dataSourceMysqlSQLSettings")
+//    @ConfigurationProperties(prefix = "datasource.mysql")
+//    @Primary
+//    public DataSource dataSourceMysql() {
+//        return DataSourceBuilder.create().build();
+//    }
+//
+//    @Bean(name = "transactionManager")
+//    public JpaTransactionManager transactionManager(EntityManagerFactory emf) {
+//        return new JpaTransactionManager(emf);
+//    }
+//
+//    @Bean(name = "hibernateJpaVendorAdapter")
+//    public JpaVendorAdapter jpaVendorAdapter() {
+//        HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
+//        jpaVendorAdapter.setDatabase(Database.MYSQL);
+//        return jpaVendorAdapter;
+//    }
+//
+//    @Bean(name = "entityManagerFactory")
+//    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+//        LocalContainerEntityManagerFactoryBean lemfb = new LocalContainerEntityManagerFactoryBean();
+//        lemfb.setDataSource(dataSourceMysql());
+//        lemfb.setJpaVendorAdapter(jpaVendorAdapter());
+//        lemfb.setPersistenceUnitName("default");
+//        lemfb.setPackagesToScan("com.ericko.evenor");
+//        return lemfb;
+//    }
 }
