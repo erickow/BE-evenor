@@ -35,9 +35,6 @@ public class User {
     private String email;
 
     @Column(nullable = false)
-    @Size(max = 32)
-    @NotNull
-    @NotBlank
     private String password;
 
     @Column
@@ -46,7 +43,7 @@ public class User {
     @Column(nullable = false)
     private Boolean active;
 
-    @ManyToMany(targetEntity = Role.class, fetch = FetchType.EAGER)
+    @ManyToMany(targetEntity = Role.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL   )
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     private List<Role> roles;
 
@@ -57,12 +54,13 @@ public class User {
         this.id = id;
     }
 
-    public User(UUID id, Boolean active, String name, String email, String password) {
-        this.id = id;
+    public User(Boolean active, String name, String email, String password, String photo, List<Role> roles) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.active = active;
+        this.photo = photo;
+        this.roles = roles;
     }
 
     public User(User user) {
@@ -72,4 +70,5 @@ public class User {
         this.password = user.password;
         this.active = active;
     }
+
 }

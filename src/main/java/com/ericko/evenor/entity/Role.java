@@ -31,4 +31,10 @@ public class Role {
     @Size(max = 40)
     private String description;
 
+    Role() {}
+
+    public Role(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
 }

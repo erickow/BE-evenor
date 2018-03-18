@@ -105,7 +105,6 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
                 .scopes(scopes.split(","))
                 .resourceIds(resourceId)
                 .accessTokenValiditySeconds(accessTokenValiditySeconds)
-                .secret("secret")
                 .redirectUris(redirectUris);
     }
 

@@ -27,8 +27,8 @@ public class CustomUserDetailService implements UserDetailsService {
             throw new UsernameNotFoundException(
                     "INVALID USER WITH LOGIN: " + userName);
         } else {
-            List<String> userRoles = userRepository.findByRoles(user.getId());
-            return new CustomUserDetails(user, userRoles);
+//            List<String> userRoles = userRepository.findByRoles(user.getId());
+            return new CustomUserDetails(user);
         }
     }
 }

@@ -12,7 +12,7 @@ public class CustomUserDetails extends User implements UserDetails {
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public CustomUserDetails(User user, List<String> userRoles) {
+    public CustomUserDetails(User user) {
         super(user);
         this.authorities = translate(user.getRoles());
     }
