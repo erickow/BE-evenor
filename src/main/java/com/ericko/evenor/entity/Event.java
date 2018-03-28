@@ -1,5 +1,6 @@
 package com.ericko.evenor.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.NonNull;
 import org.hibernate.annotations.GenericGenerator;
@@ -11,6 +12,7 @@ import org.testng.annotations.ObjectFactory;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -36,18 +38,27 @@ public class Event {
 
     @Column(nullable = false)
     @NonNull
-    @NotBlank
     @DateTimeFormat
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd-mm-yyyy hh:mm:ss")
     private Date startDate;
 
     @Column(nullable = false)
     @NonNull
-    @NotBlank
     @DateTimeFormat
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd-mm-yyyy hh:mm:ss")
     private Date endDate;
 
-    @OneToMany(targetEntity = User.class, fetch = FetchType.EAGER)
+    @ManyToMany(targetEntity = User.class, fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     private List<User> comittee;
 
+    public Event(){}
+
+    public Event (String name, String description, Date startDate, Date endDate, List<User> comittee) {
+        this.name = name;
+        this.description = description;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.comittee = comittee;
+    }
 }

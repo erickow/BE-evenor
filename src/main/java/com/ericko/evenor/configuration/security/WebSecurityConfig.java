@@ -36,15 +36,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-                .httpBasic().disable()
-                .csrf().disable()
-                .authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS).permitAll()
-                .anyRequest().authenticated();
-    }
+//    @Override
+//    protected void configure(HttpSecurity http) throws Exception {
+//        http
+//                .httpBasic().disable()
+//                .csrf().disable()
+//                .authorizeRequests()
+//                .antMatchers("/*").permitAll()
+//                .antMatchers(HttpMethod.OPTIONS).permitAll()
+//                .anyRequest()
+//                .authenticated();
+//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

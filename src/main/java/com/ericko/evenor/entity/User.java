@@ -68,7 +68,7 @@ public class User {
         this.name = user.name;
         this.email = user.email;
         this.password = user.password;
-        this.active = active;
+        this.active = user.active;
     }
 
 }
