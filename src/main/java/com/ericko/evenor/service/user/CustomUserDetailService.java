@@ -23,6 +23,7 @@ public class CustomUserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(userName);
+        System.out.println(user);
         if (null == user) {
             throw new UsernameNotFoundException(
                     "INVALID USER WITH LOGIN: " + userName);
@@ -31,4 +32,5 @@ public class CustomUserDetailService implements UserDetailsService {
             return new CustomUserDetails(user);
         }
     }
+
 }

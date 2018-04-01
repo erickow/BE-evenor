@@ -43,7 +43,7 @@ public class User {
     @Column(nullable = false)
     private Boolean active;
 
-    @ManyToMany(targetEntity = Role.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL   )
+    @ManyToMany(targetEntity = Role.class, fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     private List<Role> roles;
 

@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
@@ -25,6 +26,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "get all user", notes = "List of all user")
     public @ResponseBody List<User> getUser(HttpServletRequest request, HttpServletResponse response) {
