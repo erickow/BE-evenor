@@ -1,0 +1,117 @@
+package com.ericko.evenor.configuration.oauth2;
+
+import com.ericko.evenor.configuration.jwt.CustomTokenEnhancer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenEnhancer;
+import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
+import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+
+import java.util.Arrays;
+
+/**
+ * Configures the authorization server.
+ * The @EnableAuthorizationServer annotation is used to configure the OAuth 2.0 Authorization Server mechanism,
+ * together with any @Beans that implement AuthorizationServerConfigurer (there is a handy adapter implementation with empty methods).
+ */
+
+@Configuration
+@EnableAuthorizationServer
+public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Value("${config.oauth2.signingKey}")
+    private String signingKey;
+
+    @Value("${config.oauth2.resourceId}")
+    private String resourceId;
+
+    @Value("${config.oauth2.clientId}")
+    private String clientId;
+
+    @Value("${config.oauth2.clientSecret}")
+    private String clientSecret;
+
+    @Value("${config.oauth2.scopes}")
+    private String scopes;
+
+    @Value("${config.oauth2.accessTokenValiditySeconds}")
+    private Integer accessTokenValiditySeconds;
+
+    @Value("${config.oauth2.authorizedGrantTypes}")
+    private String authorizedGrantTypes;
+
+    @Value("${config.oauth2.redirectUris}")
+    private String redirectUris;
+
+    @Bean
+    public TokenStore tokenStore() {
+        return new JwtTokenStore(accessTokenConverter());
+    }
+
+    @Bean
+    public JwtAccessTokenConverter accessTokenConverter() {
+        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+        converter.setSigningKey(signingKey);
+        return converter;
+    }
+
+    @Bean
+    @Primary
+    public DefaultTokenServices tokenServices() {
+        DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
+        defaultTokenServices.setTokenStore(tokenStore());
+        defaultTokenServices.setSupportRefreshToken(true);
+        return defaultTokenServices;
+    }
+
+    @Bean
+    public TokenEnhancer tokenEnhancer() {
+        return new CustomTokenEnhancer();
+    }
+
+    @Override
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+        TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
+        tokenEnhancerChain.setTokenEnhancers(
+                Arrays.asList(tokenEnhancer(), accessTokenConverter()));
+
+        endpoints.tokenStore(tokenStore())
+                .tokenEnhancer(tokenEnhancerChain)
+                .authenticationManager(authenticationManager);
+    }
+
+    @Override
+    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+        clients.inMemory()
+                .withClient(clientId)
+                .secret(clientSecret)
+                .authorizedGrantTypes(authorizedGrantTypes.split(","))
+                .authorities("ROLE_CLIENT","ROLE_TRUSTED_CLIENT")
+                .scopes(scopes.split(","))
+                .resourceIds(resourceId)
+                .accessTokenValiditySeconds(accessTokenValiditySeconds)
+                .redirectUris(redirectUris);
+    }
+
+    @Override
+    public void configure(AuthorizationServerSecurityConfigurer oauthServer)
+            throws Exception {
+                oauthServer.tokenKeyAccess("permitAll()")
+                .checkTokenAccess("isAuthenticated()");
+    }
+}
