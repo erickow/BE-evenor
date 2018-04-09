@@ -18,8 +18,8 @@ public class CustomTokenEnhancer implements TokenEnhancer {
             OAuth2Authentication authentication) {
         Map<String, Object> additionalInfo = new HashMap<>();
         additionalInfo.put("user_name", authentication.getName());
-        List<String> authority_names = authentication.getAuthorities().parallelStream().map(ga -> ga.getAuthority()).collect(Collectors.toList());
-        additionalInfo.put("authorities", authority_names);
+        List<String> authorityNames = authentication.getAuthorities().parallelStream().map(ga -> ga.getAuthority()).collect(Collectors.toList());
+        additionalInfo.put("authorities", authorityNames);
         ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInfo);
         return accessToken;
     }

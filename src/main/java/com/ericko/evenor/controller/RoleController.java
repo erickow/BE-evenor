@@ -16,7 +16,7 @@ import java.util.UUID;
 
 import static com.ericko.evenor.util.response.ResponseHandler.checkResourceFound;
 
-@Controller
+@RestController
 @RequestMapping("/role")
 public class RoleController {
     @Autowired

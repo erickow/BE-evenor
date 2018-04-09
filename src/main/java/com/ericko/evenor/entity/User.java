@@ -40,7 +40,7 @@ public class User {
     @Column
     private String photo;
 
-    @Column(nullable = false)
+    @Column
     private Boolean active;
 
     @ManyToMany(targetEntity = Role.class, fetch = FetchType.EAGER)
@@ -69,6 +69,6 @@ public class User {
         this.email = user.email;
         this.password = user.password;
         this.active = user.active;
+        this.photo = user.photo;
     }
-
 }
