@@ -39,13 +39,13 @@ public class Event {
     @Column(nullable = false)
     @NonNull
     @DateTimeFormat
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd-mm-yyyy hh:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-mm-dd hh:mm:ss")
     private Date startDate;
 
     @Column(nullable = false)
     @NonNull
     @DateTimeFormat
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd-mm-yyyy hh:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-mm-dd hh:mm:ss")
     private Date endDate;
 
     @ManyToMany(targetEntity = User.class, fetch = FetchType.EAGER)

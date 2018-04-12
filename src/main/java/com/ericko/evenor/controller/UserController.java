@@ -14,6 +14,8 @@ import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.List;
 import java.util.UUID;
 
@@ -45,6 +47,22 @@ public class UserController {
             HttpServletRequest request, HttpServletResponse response
     ) {
         User result = userService.getUser(id);
+        checkResourceFound(result);
+        return result;
+    }
+
+    @PostMapping("/account/")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "get user by id", notes = "the user is search by id")
+    public @ResponseBody
+    User getUser(
+            @ApiParam(value = "the username of user")
+            @RequestParam String username,
+            HttpServletRequest request, HttpServletResponse response
+    ){
+//    ) throws UnsupportedEncodingException {
+//        String url = URLDecoder.decode(username, "UTF-8");
+        User result = userService.getUserByEmail(username);
         checkResourceFound(result);
         return result;
     }

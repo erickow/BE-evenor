@@ -13,6 +13,8 @@ public interface UserService {
 
     User getUser(UUID id);
 
+    User getUserByEmail(String email);
+
     User createUser( @Valid User user);
 
     User updateUser( @Valid User user);

@@ -1,6 +1,7 @@
 package com.ericko.evenor.controller;
 
 import com.ericko.evenor.entity.Event;
+import com.ericko.evenor.entity.User;
 import com.ericko.evenor.service.event.EventService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -44,6 +45,34 @@ public class EventController {
             HttpServletRequest request, HttpServletResponse response
     ){
         Event result = eventService.getEvent(id);
+        checkResourceFound(result);
+        return result;
+    }
+
+    @GetMapping("/upcoming/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "event data", notes = "getting upcomming event data by id")
+    public @ResponseBody
+    List<Event> getUpcommingEvent(
+            @ApiParam(value = "event id")
+            @PathVariable("id")UUID id,
+            HttpServletRequest request, HttpServletResponse response
+    ){
+        List<Event> result = eventService.getUpcommingEvent(id);
+        checkResourceFound(result);
+        return result;
+    }
+
+    @GetMapping("/history/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "event data", notes = "getting history event data by id")
+    public @ResponseBody
+    List<Event> getHistoryEvent(
+            @ApiParam(value = "event id")
+            @PathVariable("id")UUID id,
+            HttpServletRequest request, HttpServletResponse response
+    ){
+        List<Event> result = eventService.getHistoryEvent(id);
         checkResourceFound(result);
         return result;
     }

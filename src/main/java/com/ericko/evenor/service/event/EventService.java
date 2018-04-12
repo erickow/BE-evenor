@@ -1,6 +1,7 @@
 package com.ericko.evenor.service.event;
 
 import com.ericko.evenor.entity.Event;
+import com.ericko.evenor.entity.User;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
@@ -12,6 +13,10 @@ public interface EventService {
     List<Event> getEvent();
 
     Event getEvent(UUID id);
+
+    List<Event> getUpcommingEvent(UUID id);
+
+    List<Event> getHistoryEvent(UUID id);
 
     Event createEvent(@Valid Event event);
 
