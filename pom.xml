@@ -76,16 +76,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.ericko</groupId>
-            <artifactId>evenor</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.ericko</groupId>
-            <artifactId>evenor</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
             <version>2.7.0</version>

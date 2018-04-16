@@ -1,6 +1,9 @@
 package com.ericko.evenor.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -14,7 +17,10 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
+@Builder
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
 
     @Id
@@ -47,22 +53,9 @@ public class User {
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     private List<Role> roles;
 
-    public User() {
-    }
-
     public User(UUID id) {
         this.id = id;
     }
-
-    public User(Boolean active, String name, String email, String password, String photo, List<Role> roles) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.active = active;
-        this.photo = photo;
-        this.roles = roles;
-    }
-
     public User(User user) {
         this.id = user.id;
         this.name = user.name;
@@ -70,5 +63,6 @@ public class User {
         this.password = user.password;
         this.active = user.active;
         this.photo = user.photo;
+        this.roles = user.roles;
     }
 }

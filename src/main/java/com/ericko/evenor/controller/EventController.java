@@ -1,6 +1,7 @@
 package com.ericko.evenor.controller;
 
 import com.ericko.evenor.entity.Event;
+import com.ericko.evenor.entity.EventComittee;
 import com.ericko.evenor.entity.User;
 import com.ericko.evenor.service.event.EventService;
 import io.swagger.annotations.ApiOperation;
@@ -53,12 +54,12 @@ public class EventController {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "event data", notes = "getting upcomming event data by id")
     public @ResponseBody
-    List<Event> getUpcommingEvent(
+    List<EventComittee> getUpcommingEvent(
             @ApiParam(value = "event id")
             @PathVariable("id")UUID id,
             HttpServletRequest request, HttpServletResponse response
     ){
-        List<Event> result = eventService.getUpcommingEvent(id);
+        List<EventComittee> result = eventService.getUpcommingEvent(id);
         checkResourceFound(result);
         return result;
     }
@@ -67,12 +68,12 @@ public class EventController {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "event data", notes = "getting history event data by id")
     public @ResponseBody
-    List<Event> getHistoryEvent(
+    List<EventComittee> getHistoryEvent(
             @ApiParam(value = "event id")
             @PathVariable("id")UUID id,
             HttpServletRequest request, HttpServletResponse response
     ){
-        List<Event> result = eventService.getHistoryEvent(id);
+        List<EventComittee> result = eventService.getHistoryEvent(id);
         checkResourceFound(result);
         return result;
     }
@@ -113,4 +114,5 @@ public class EventController {
     ) {
         eventService.deleteEvent(id);
     }
+
 }
