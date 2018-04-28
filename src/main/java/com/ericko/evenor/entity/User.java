@@ -4,15 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.*;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.UUID;
 
@@ -49,13 +47,15 @@ public class User {
     @Column
     private Boolean active;
 
-    @ManyToMany(targetEntity = Role.class, fetch = FetchType.EAGER)
+    @ManyToMany(targetEntity = Role.class)
+    @LazyCollection(LazyCollectionOption.FALSE)
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     private List<Role> roles;
 
     public User(UUID id) {
         this.id = id;
     }
+
     public User(User user) {
         this.id = user.id;
         this.name = user.name;

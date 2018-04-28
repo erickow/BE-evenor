@@ -113,6 +113,7 @@ public class EvenorApplication {
 				.description("Donor darah event")
 				.startDate(new Date(118,3,22,10,10,10))
 				.endDate( new Date(118,3,28,10,10,10))
+				.adminEvent(Arrays.asList(user1))
 				.build();
 
         Event event2 = Event.builder()
@@ -120,6 +121,7 @@ public class EvenorApplication {
 				.description("Entrepreneur festival event description")
 				.startDate(new Date(118,2,22,10,10,10))
 				.endDate(new Date(118,2,28,10,10,10))
+				.adminEvent(Arrays.asList(user1))
 				.build();
 
 
@@ -128,6 +130,7 @@ public class EvenorApplication {
 				.description("Deskripsi seminar programing java")
 				.startDate(new Date(118,5,22,10,10,10))
 				.endDate(new Date(118,5,28,10,10,10))
+				.adminEvent(Arrays.asList(user1))
 				.build();
 
         Event event4 = Event.builder()
@@ -135,6 +138,7 @@ public class EvenorApplication {
 				.description("deskripsi seminar pembuatan flappi bird")
 				.startDate(new Date(118,1,22,10,10,10))
 				.endDate(new Date(118,1,28,10,10,10))
+				.adminEvent(Arrays.asList(user1))
 				.build();
 
         Event event5 = Event.builder()
@@ -142,6 +146,7 @@ public class EvenorApplication {
 				.description("deskripsi workshop ionix dan API")
 				.startDate(new Date(118,4,22,10,10,10))
 				.endDate(new Date(118,4,28,10,10,10))
+				.adminEvent(Arrays.asList(user1))
 				.build();
 
         Event event6 = Event.builder()
@@ -149,6 +154,7 @@ public class EvenorApplication {
 				.description("deskripsi seminar profesi ITU")
 				.startDate(new Date(118,10,22,10,10,10))
 				.endDate(new Date(118,10,28,10,10,10))
+				.adminEvent(Arrays.asList(user1))
 				.build();
 
 

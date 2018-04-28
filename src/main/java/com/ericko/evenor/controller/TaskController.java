@@ -45,6 +45,20 @@ public class TaskController {
         return result;
     }
 
+    @GetMapping("/event/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "get task by id", notes = "the task is search by id")
+    public @ResponseBody
+    List<Task> getTaskByEvent(
+            @ApiParam(value = "the id of task")
+            @PathVariable UUID id,
+            HttpServletRequest request, HttpServletResponse response
+    ) {
+       List<Task> result = taskService.getTaskByEvent(id);
+        checkResourceFound(result);
+        return result;
+    }
+
     @PostMapping("/")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "task object", notes = "create new task")

@@ -21,8 +21,14 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task getTask(UUID id) {
-        return taskRepository.findOne(id);
+        return  taskRepository.findOne(id);
     }
+
+    @Override
+    public List<Task> getTaskByEvent(UUID id) {
+        return (List<Task>) taskRepository.findAllByEvent_Id(id);
+    }
+
 
     @Override
     public Task createTask(Task task) {

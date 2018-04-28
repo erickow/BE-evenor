@@ -14,6 +14,8 @@ public interface TaskService {
 
     Task getTask(UUID id);
 
+    List<Task> getTaskByEvent(UUID id);
+
     Task createTask( @Valid Task task);
 
     Task updateTask( @Valid Task task);

@@ -1,8 +1,7 @@
 package com.ericko.evenor.entity;
 
 import com.sun.javafx.font.freetype.FTFactory;
-import lombok.Data;
-import lombok.NonNull;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -17,6 +16,9 @@ import java.util.UUID;
 
 @Entity
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Task {
     @Id
     @GeneratedValue(generator = "uuid")
@@ -49,5 +51,9 @@ public class Task {
     @ManyToOne(targetEntity = Event.class, fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     private Event event;
+
+    @ManyToMany(targetEntity = User.class, fetch = FetchType.EAGER)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
+    private List<User> volunteer;
 
 }

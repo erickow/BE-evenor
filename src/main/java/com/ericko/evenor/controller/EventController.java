@@ -2,6 +2,7 @@ package com.ericko.evenor.controller;
 
 import com.ericko.evenor.entity.Event;
 import com.ericko.evenor.entity.EventComittee;
+import com.ericko.evenor.entity.EventParticipant;
 import com.ericko.evenor.entity.User;
 import com.ericko.evenor.service.event.EventService;
 import io.swagger.annotations.ApiOperation;
@@ -74,6 +75,34 @@ public class EventController {
             HttpServletRequest request, HttpServletResponse response
     ){
         List<EventComittee> result = eventService.getHistoryEvent(id);
+        checkResourceFound(result);
+        return result;
+    }
+
+    @GetMapping("/comittee/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "all event data", notes = "getting all event")
+    public @ResponseBody
+    List<EventComittee> getComittee(
+            @ApiParam(value = "event id")
+            @PathVariable("id")UUID id,
+            HttpServletRequest request, HttpServletResponse response
+    ){
+        List<EventComittee> result = eventService.getComittee(id);
+        checkResourceFound(result);
+        return result;
+    }
+
+    @GetMapping("/participant/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "all event data", notes = "getting all event")
+    public @ResponseBody
+    List<EventParticipant> getParticipant(
+            @ApiParam(value = "event id")
+            @PathVariable("id")UUID id,
+            HttpServletRequest request, HttpServletResponse response
+    ){
+        List<EventParticipant> result = eventService.getParticipant(id);
         checkResourceFound(result);
         return result;
     }
