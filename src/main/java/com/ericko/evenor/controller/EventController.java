@@ -107,15 +107,17 @@ public class EventController {
         return result;
     }
 
-    @PostMapping("/")
+    @PostMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "event data", notes = "create new event")
     public @ResponseBody
     Event createEvent(
+            @ApiParam(value = "user id")
+            @PathVariable("id") UUID id,
             @RequestBody Event event,
             HttpServletRequest request, HttpServletResponse response
     ) {
-        Event result = eventService.createEvent(event);
+        Event result = eventService.createEvent(id, event);
         return result;
     }
 

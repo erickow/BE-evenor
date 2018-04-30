@@ -27,7 +27,7 @@ public interface EventService {
 
     List<EventParticipant> getParticipant(UUID id);
 
-    Event createEvent(@Valid Event event);
+    Event createEvent(UUID id, @Valid Event event);
 
     Event updateEvent(@Valid Event event);
 
