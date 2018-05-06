@@ -32,4 +32,7 @@ public class EventComittee {
 
     @ManyToOne(targetEntity = Event.class)
     private Event event;
+
+    @ManyToOne(targetEntity = Division.class)
+    private Division division;
 }

@@ -6,10 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -30,4 +28,6 @@ public class Option {
     @Column
     private Integer total;
 
+    @ManyToMany(targetEntity = Voter.class)
+    private List<Voter> voters;
 }

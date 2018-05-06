@@ -1,10 +1,15 @@
 package com.ericko.evenor.service.Task;
 
+import com.ericko.evenor.entity.Event;
+import com.ericko.evenor.entity.Job;
 import com.ericko.evenor.entity.Task;
+import com.ericko.evenor.repository.EventRepository;
+import com.ericko.evenor.repository.JobRepository;
 import com.ericko.evenor.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,7 +17,13 @@ import java.util.UUID;
 public class TaskServiceImpl implements TaskService {
 
     @Autowired
-    TaskRepository taskRepository;
+    private TaskRepository taskRepository;
+
+    @Autowired
+    private EventRepository eventRepository;
+
+    @Autowired
+    private JobRepository jobRepository;
 
     @Override
     public List<Task> getTask() {
@@ -26,18 +37,41 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<Task> getTaskByEvent(UUID id) {
-        return (List<Task>) taskRepository.findAllByEvent_Id(id);
+        Event event = eventRepository.findOne(id);
+        return (List<Task>) taskRepository.findAllByEvent(event);
     }
 
-
     @Override
-    public Task createTask(Task task) {
+    public Task createTask(UUID id, Task task) {
+        task.setEvent(eventRepository.findOne(id));
         return taskRepository.save(task);
     }
 
     @Override
     public Task updateTask(Task task) {
         return taskRepository.save(task);
+    }
+
+    @Override
+    public Job getJob(UUID id) {
+        return jobRepository.findOne(id);
+    }
+
+    @Override
+    public Task createJob(UUID id, Job job) {
+        Task task = taskRepository.findOne(id);
+        task.setJobs(Arrays.asList(job));
+        return taskRepository.save(task);
+    }
+
+    @Override
+    public Job updateJob(UUID id, Job job) {
+        return jobRepository.save(job);
+    }
+
+    @Override
+    public void deleteJob(UUID id) {
+        jobRepository.delete(id);
     }
 
     @Override

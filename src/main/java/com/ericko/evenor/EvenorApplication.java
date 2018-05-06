@@ -37,11 +37,12 @@ public class EvenorApplication {
 	public void authenticationManager(
             AuthenticationManagerBuilder builder,
             UserRepository userRepository,
-            UserService userService,
 			EventRepository eventRepository,
             RoleRepository roleRepository,
 			EventComitteeRepository eventComitteeRepository,
-			EventParticipantRepository eventParticipantRepository
+			EventParticipantRepository eventParticipantRepository,
+			JobRepository jobRepository,
+            TaskRepository taskRepository
     ) throws Exception {
 		//Setup a default user if db is empty
 		Role role1 = new Role("admin","admin description");
@@ -222,6 +223,26 @@ public class EvenorApplication {
 		eventParticipantRepository.save(eventParticipant13);
 		eventParticipantRepository.save(eventParticipant14);
 		eventParticipantRepository.save(eventParticipant15);
+
+		Job job1 = Job.builder().name("memesan panggung").position(1).description("panggung harus sudah dipesan").build();
+		Job job2 = Job.builder().name("Rapat panitia").position(2).description("Rapat akan diadakan pada tanggal tertera diharapkan seluruh panitia dapat datang").build();
+		Job job3 = Job.builder().name("Pesan Makanan").position(3).description("Makanan harus segera dipesan agar tidak mendadak").build();
+		Job job4 = Job.builder().name("Sewa peralatan band").position(4).description("peralatan band yang harus disewa meliputi gitar, drum dan bass").build();
+		Job job5 = Job.builder().name("Pengerjaan dokumen").position(5).description("dokumen harus dikerjakan oleh sekretaris").build();
+
+		jobRepository.save(job1);
+        jobRepository.save(job2);
+        jobRepository.save(job3);
+        jobRepository.save(job4);
+        jobRepository.save(job5);
+
+		Task task1 = Task.builder().name("List").position(1).event(event3).jobs(Arrays.asList(job1,job2,job3)).build();
+        Task task2 = Task.builder().name("On going").position(2).event(event3).jobs(Arrays.asList(job4)).build();
+        Task task3 = Task.builder().name("Done").position(3).event(event3).jobs(Arrays.asList(job5)).build();
+
+        taskRepository.save(task1);
+        taskRepository.save(task2);
+        taskRepository.save(task3);
 
 
 		builder.userDetailsService(userDetailsService(userRepository)).passwordEncoder(passwordEncoder);

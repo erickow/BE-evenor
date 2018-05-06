@@ -24,7 +24,4 @@ public class Voter {
 
     @ManyToOne(targetEntity = User.class)
     private User user;
-
-    @ManyToOne(targetEntity = Vote.class)
-    private Vote vote;
 }

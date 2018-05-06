@@ -10,6 +10,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -38,6 +39,9 @@ public class Vote {
 
     @Column
     private Date endDate;
+
+    @ManyToMany(targetEntity = Option.class)
+    private List<Option> options;
 
     @ManyToOne(targetEntity = Event.class)
     private Event event;
