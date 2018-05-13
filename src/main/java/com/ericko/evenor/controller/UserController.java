@@ -11,11 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.List;
 import java.util.UUID;
 
@@ -76,6 +75,19 @@ public class UserController {
             HttpServletRequest request, HttpServletResponse response
     ) {
         User result = userService.createUser(user);
+        return result;
+    }
+
+    @PutMapping("/edit/photo/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "user object", notes = "create new user")
+    public @ResponseBody
+    User editUserProfile(
+            @ApiParam("id user") @PathVariable("id") UUID id,
+            HttpServletRequest request, HttpServletResponse response,
+            @RequestParam("file") MultipartFile...file
+    ) throws FileFormatException {
+        User result = userService.uploadPhoto(id, file);
         return result;
     }
 

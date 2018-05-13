@@ -3,7 +3,6 @@ package com.ericko.evenor.controller;
 import com.ericko.evenor.entity.Event;
 import com.ericko.evenor.entity.EventComittee;
 import com.ericko.evenor.entity.EventParticipant;
-import com.ericko.evenor.entity.User;
 import com.ericko.evenor.service.event.EventService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

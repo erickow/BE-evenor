@@ -1,7 +1,10 @@
 package com.ericko.evenor.service.vote;
 
+import com.ericko.evenor.entity.Event;
+import com.ericko.evenor.entity.EventComittee;
 import com.ericko.evenor.entity.Vote;
 import com.ericko.evenor.entity.Voter;
+import com.ericko.evenor.repository.EventComitteeRepository;
 import com.ericko.evenor.repository.EventRepository;
 import com.ericko.evenor.repository.VoteRepository;
 import com.ericko.evenor.repository.VoterRepository;
@@ -24,9 +27,13 @@ public class VoteServiceImpl implements VoteService {
     @Autowired
     private EventRepository eventRepository;
 
+    @Autowired
+    private EventComitteeRepository eventComitteeRepository;
+
     @Override
     public List<Vote> getVoteByEvent(UUID id) {
-        return voteRepository.findAllByEvent_Id(id);
+
+        return voteRepository.findAllByEvent(eventRepository.findOne(id));
     }
 
     @Override
@@ -36,18 +43,21 @@ public class VoteServiceImpl implements VoteService {
 
     @Override
     public List<Vote> getUpcomingVote(UUID id) {
-        return voteRepository.findAllByEvent_IdAndEvent_EndDateAfter(id, new Date());
+        Event event = eventRepository.findOne(id);
+        return voteRepository.findAllByEventAndEndDateAfter(event, new Date());
     }
 
     @Override
     public List<Vote> getHistoryVote(UUID id) {
-        return voteRepository.findAllByEvent_IdAndEvent_EndDateBefore(id, new Date());
+        Event event = eventRepository.findOne(id);
+        return voteRepository.findAllByEventAndEndDateBefore(event, new Date());
     }
 
     @Override
     public Vote createVote(UUID id, Vote vote) {
-        vote.setEvent(eventRepository.findOne(id));
-        //create option
+        Event event = eventRepository.findOne(id);
+        vote.setEvent(event);
+        vote.setTotalVoter(eventComitteeRepository.countEventComitteeByEvent(event));
         return voteRepository.save(vote);
     }
 

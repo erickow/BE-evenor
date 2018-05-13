@@ -15,4 +15,6 @@ public interface EventComitteeRepository extends JpaRepository<EventComittee,UUI
     List<EventComittee> findAllByComitteeAndEvent_EndDateAfter(User user, Date date);
     List<EventComittee> findAllByComitteeAndEvent_EndDateBefore(User user, Date date);
     List<EventComittee> findAllByEvent_Id(UUID id);
+
+    Integer countEventComitteeByEvent(Event event);
 }

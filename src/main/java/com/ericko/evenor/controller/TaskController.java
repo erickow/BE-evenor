@@ -2,7 +2,7 @@ package com.ericko.evenor.controller;
 
 import com.ericko.evenor.entity.Job;
 import com.ericko.evenor.entity.Task;
-import com.ericko.evenor.service.Task.TaskService;
+import com.ericko.evenor.service.task.TaskService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;

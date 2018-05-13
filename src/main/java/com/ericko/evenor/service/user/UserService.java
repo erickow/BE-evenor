@@ -1,7 +1,9 @@
 package com.ericko.evenor.service.user;
 
 import com.ericko.evenor.entity.User;
+import org.apache.xmlbeans.impl.piccolo.io.FileFormatException;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -23,4 +25,5 @@ public interface UserService {
 
     List<User> searchByName(String name);
 
+    User uploadPhoto(UUID id, MultipartFile[] file) throws FileFormatException;
 }

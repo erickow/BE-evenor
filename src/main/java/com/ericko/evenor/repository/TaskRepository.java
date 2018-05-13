@@ -10,5 +10,5 @@ import java.util.UUID;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, UUID> {
-    List<Task> findAllByEvent(Event event);
+    List<Task> findAllByEventOrderByPosition(Event event);
 }
