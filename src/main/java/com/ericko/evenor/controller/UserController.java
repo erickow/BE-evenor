@@ -5,9 +5,14 @@ import com.ericko.evenor.service.user.UserService;
 import com.ericko.evenor.util.response.ResponseWrapper;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.xmlbeans.impl.piccolo.io.FileFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
@@ -15,6 +20,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
@@ -66,6 +76,29 @@ public class UserController {
         return result;
     }
 
+    @PostMapping("/photo/")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "get user by id", notes = "the user is search by id")
+    public @ResponseBody
+    ResponseEntity<ByteArrayResource>
+    getUserPhoto(
+            @ApiParam(value = "the username of user")
+            @RequestParam("photo") String data,
+            HttpServletRequest request, HttpServletResponse response
+    ) throws IOException {
+        File file = new File(data);
+        Path path = Paths.get(file.getAbsolutePath());
+        ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=" + path);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(file.length())
+                .contentType(MediaType.parseMediaType("application/octet-stream"))
+                .body(resource);
+    }
+
     @PostMapping("/")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "user object", notes = "create new user")
@@ -85,7 +118,7 @@ public class UserController {
     User editUserProfile(
             @ApiParam("id user") @PathVariable("id") UUID id,
             HttpServletRequest request, HttpServletResponse response,
-            @RequestParam("file") MultipartFile...file
+            @RequestParam("file") MultipartFile file
     ) throws FileFormatException {
         User result = userService.uploadPhoto(id, file);
         return result;

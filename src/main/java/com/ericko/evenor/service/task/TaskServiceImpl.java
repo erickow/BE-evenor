@@ -62,7 +62,7 @@ public class TaskServiceImpl implements TaskService {
         Task task = taskRepository.findOne(id);
         task.setJobs(Arrays.asList(job));
         return taskRepository.save(task);
-    }11
+    }
 
     @Override
     public Job updateJob(UUID id, Job job) {

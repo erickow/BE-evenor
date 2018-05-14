@@ -15,6 +15,8 @@ public interface StorageService {
 
     ArrayList<String> store(MultipartFile[] file, String filename) throws FileFormatException;
 
+    String storeOne(MultipartFile file, String filename) throws FileFormatException;
+
     Stream<Path> loadAll();
 
     String load(String filename) throws IOException, InvalidFormatException;

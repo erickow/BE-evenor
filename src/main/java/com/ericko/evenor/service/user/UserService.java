@@ -25,5 +25,5 @@ public interface UserService {
 
     List<User> searchByName(String name);
 
-    User uploadPhoto(UUID id, MultipartFile[] file) throws FileFormatException;
+    User uploadPhoto(UUID id, MultipartFile file) throws FileFormatException;
 }

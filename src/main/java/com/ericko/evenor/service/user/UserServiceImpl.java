@@ -66,18 +66,18 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User uploadPhoto(UUID id, MultipartFile[] file) throws FileFormatException {
-        String filename = FilenameUtils.removeExtension(file[0].getOriginalFilename());
-        String extension = FilenameUtils.getExtension(file[0].getOriginalFilename());
-        ArrayList imageName;
+    public User uploadPhoto(UUID id, MultipartFile file) throws FileFormatException {
+        String filename = FilenameUtils.removeExtension(file.getOriginalFilename());
+        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+        String imageName;
 
         User user = userRepository.findOne(id);
         if (Arrays.asList(FilesLocationConfig.Image.FILE_EXTENSION_ALLOWED).contains(extension)) {
-            imageName = imageStorageService.store(file, filename);
+            imageName = imageStorageService.storeOne(file, filename);
         }  else {
             throw new FileFormatException("Format tidak didukung");
         }
-        user.setPhoto(String.valueOf(imageName));
+        user.setPhoto(imageName);
         return userRepository.save(user);
     }
 

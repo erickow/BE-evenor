@@ -19,7 +19,7 @@ public class ImageStorageServiceImpl extends StorageServiceImpl implements Stora
     }
 
     @Override
-    public ArrayList<String> storeMany(MultipartFile[] file, String filename) throws FileFormatException {
+    public ArrayList<String> store(MultipartFile[] file, String filename) throws FileFormatException {
         return super.store(file, filename);
     }
 

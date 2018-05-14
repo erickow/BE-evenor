@@ -65,6 +65,26 @@ public class StorageServiceImpl implements StorageService {
     }
 
     @Override
+    public String storeOne(MultipartFile file, String filename) throws FileFormatException {
+        String filenameFolder = MD5.generate(filename);
+        String folderLocation = this.rootLocation+"/"+filenameFolder;
+        String filenames = new String();
+        String fileLocation = folderLocation+"/"+file.getOriginalFilename();
+        try {
+            File fileCheck = new File(folderLocation);
+            if(!fileCheck.isDirectory()){
+                fileCheck.mkdir();
+            }
+            File fileSave = new File(fileLocation);
+            FileUtils.writeByteArrayToFile(fileSave, file.getBytes());
+            filenames = fileLocation;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return filenames;
+    }
+
+    @Override
     public Stream<Path> loadAll() {
         return null;
     } // to be implemented
