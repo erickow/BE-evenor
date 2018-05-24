@@ -18,7 +18,7 @@ public interface VoteService {
 
     List<Vote> getHistoryVote(UUID id);
 
-    Vote createVote(UUID id, Vote vote);
+    Vote createVote(UUID eventId, UUID userId, Vote vote);
 
     Vote updateVote(Vote vote);
 

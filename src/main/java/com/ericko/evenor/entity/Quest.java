@@ -34,6 +34,7 @@ public class Quest {
     @Column
     private String description;
 
-    @Column Integer score;
+    @Column
+    private Integer score;
 
 }

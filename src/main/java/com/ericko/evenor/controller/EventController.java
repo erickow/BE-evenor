@@ -6,12 +6,16 @@ import com.ericko.evenor.entity.EventParticipant;
 import com.ericko.evenor.service.event.EventService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.xmlbeans.impl.piccolo.io.FileFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -111,12 +115,17 @@ public class EventController {
     @ApiOperation(value = "event data", notes = "create new event")
     public @ResponseBody
     Event createEvent(
-            @ApiParam(value = "user id")
-            @PathVariable("id") UUID id,
-            @RequestBody Event event,
+            @ApiParam(value = "user id") @PathVariable("id") UUID id,
+            @ApiParam(value = "file image") @RequestParam("file") MultipartFile file,
+            @ApiParam(value = "String name") @RequestParam("name") String name,
+            @ApiParam(value = "String description") @RequestParam("description") String description,
+            @ApiParam(value = "String setParticipant") @RequestParam("setParticipant") String setParticipant,
+            @ApiParam(value = "String setComittee") @RequestParam("setComittee") String setComittee,
+            @ApiParam(value = "String startDate") @RequestParam("startDate") String startDate,
+            @ApiParam(value = "String endDate") @RequestParam("endDate") String endDate,
             HttpServletRequest request, HttpServletResponse response
-    ) {
-        Event result = eventService.createEvent(id, event);
+    ) throws FileFormatException, ParseException {
+        Event result = eventService.createEvent(id, name, description, setParticipant, setComittee, startDate, endDate, file);
         return result;
     }
 

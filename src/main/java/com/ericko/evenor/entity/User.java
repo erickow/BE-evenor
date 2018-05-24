@@ -47,6 +47,9 @@ public class User {
     @Column
     private Boolean active;
 
+    @Column
+    private Integer experience;
+
     @ManyToMany(targetEntity = Role.class)
     @LazyCollection(LazyCollectionOption.FALSE)
     @OnDelete(action = OnDeleteAction.NO_ACTION)
@@ -64,5 +67,6 @@ public class User {
         this.active = user.active;
         this.photo = user.photo;
         this.roles = user.roles;
+        this.experience = user.experience;
     }
 }

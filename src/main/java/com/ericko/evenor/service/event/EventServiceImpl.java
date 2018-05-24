@@ -1,16 +1,20 @@
 package com.ericko.evenor.service.event;
 
-import com.ericko.evenor.entity.Event;
-import com.ericko.evenor.entity.EventComittee;
-import com.ericko.evenor.entity.EventParticipant;
-import com.ericko.evenor.entity.User;
-import com.ericko.evenor.repository.EventComitteeRepository;
-import com.ericko.evenor.repository.EventParticipantRepository;
-import com.ericko.evenor.repository.EventRepository;
-import com.ericko.evenor.repository.UserRepository;
+import com.ericko.evenor.configuration.FilesLocationConfig;
+import com.ericko.evenor.entity.*;
+import com.ericko.evenor.repository.*;
+import com.ericko.evenor.service.storage.StorageService;
+import com.sun.org.apache.xpath.internal.operations.Bool;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.xmlbeans.impl.piccolo.io.FileFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.annotations.ApiIgnore;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -30,6 +34,13 @@ public class EventServiceImpl implements EventService {
 
     @Autowired
     private EventParticipantRepository eventParticipantRepository;
+
+    @Autowired
+    private QuestRepository questRepository;
+
+    @Autowired
+    @Qualifier("ImageStorageService")
+    private StorageService imageStorageService;
 
     @Override
     public List<Event> getEvent() {
@@ -76,8 +87,40 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event createEvent(UUID id, Event event) {
+    public Event createEvent(
+            UUID id,
+            String name,
+            String description,
+            String setParticipant,
+            String setComittee,
+            String startDate,
+            String endDate,
+            MultipartFile file) throws FileFormatException, ParseException {
+
+        String filename = FilenameUtils.removeExtension(file.getOriginalFilename());
+        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+        String imageName;
+
+        if (Arrays.asList(FilesLocationConfig.Image.FILE_EXTENSION_ALLOWED).contains(extension)) {
+            imageName = imageStorageService.storeOne(file, filename);
+        }  else {
+            throw new FileFormatException("Format tidak didukung");
+        }
+
+        Event event = Event.builder()
+                            .name(name)
+                            .description(description)
+                            .setParticipant(Boolean.valueOf(setParticipant))
+                            .setComittee(Boolean.valueOf(setComittee))
+                            .startDate(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(String.valueOf(startDate)))
+                            .endDate(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(String.valueOf(endDate)))
+                            .photo(imageName)
+                            .build();
         event.setAdminEvent(Arrays.asList(userRepository.findOne(id)));
+        event.setPhoto(imageName);
+        User user = userRepository.findOne(id);
+        Quest quest = questRepository.findByCode("#ADD_EVENT");
+        user.setExperience(user.getExperience() + quest.getScore());
         return eventRepository.save(event);
     }
 

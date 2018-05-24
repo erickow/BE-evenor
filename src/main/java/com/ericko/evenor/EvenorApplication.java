@@ -42,7 +42,8 @@ public class EvenorApplication {
 			EventComitteeRepository eventComitteeRepository,
 			EventParticipantRepository eventParticipantRepository,
 			JobRepository jobRepository,
-            TaskRepository taskRepository
+            TaskRepository taskRepository,
+			QuestRepository questRepository
     ) throws Exception {
 		//Setup a default user if db is empty
 		Role role1 = new Role("admin","admin description");
@@ -60,7 +61,8 @@ public class EvenorApplication {
 				.email("admin@mail.com")
 				.password("admin")
 				.active(false)
-				.photo("ini photo")
+                .experience(100)
+				.photo("media/image/default/default_avatar.jpg")
 				.roles(Arrays.asList( role1, role2, role3, role4 ))
 				.build();
 
@@ -69,7 +71,8 @@ public class EvenorApplication {
 				.email("com1@mail.com")
 				.password("comittee1")
 				.active(false)
-				.photo("ini photo")
+				.photo("media/image/default/default_avatar.jpg")
+                .experience(0)
 				.roles(Arrays.asList( role2, role3, role4 ))
 				.build();
 		User user3 = User.builder()
@@ -77,7 +80,8 @@ public class EvenorApplication {
 				.email("com2@mail.com")
 				.password("comittee2")
 				.active(false)
-				.photo("ini photo")
+				.photo("media/image/default/default_avatar.jpg")
+                .experience(0)
 				.roles(Arrays.asList( role2, role3, role4 ))
 				.build();
 		User user4 = User.builder()
@@ -85,7 +89,8 @@ public class EvenorApplication {
 				.email("par1@mail.com")
 				.password("participant1")
 				.active(false)
-				.photo("ini photo")
+				.photo("media/image/default/default_avatar.jpg")
+                .experience(0)
 				.roles(Arrays.asList( role2, role3, role4 ))
 				.build();
 		User user5 = User.builder()
@@ -93,7 +98,8 @@ public class EvenorApplication {
 				.email("par2@mail.com")
 				.password("participant2")
 				.active(false)
-				.photo("ini photo")
+				.photo("media/image/default/default_avatar.jpg")
+                .experience(0)
 				.roles(Arrays.asList( role2, role3, role4 ))
 				.build();
 
@@ -114,6 +120,7 @@ public class EvenorApplication {
 				.description("Donor darah event")
 				.startDate(new Date(118,3,22,10,10,10))
 				.endDate( new Date(118,3,28,10,10,10))
+				.photo("media/image/dummy/donordarah.jpg")
 				.adminEvent(Arrays.asList(user1))
 				.build();
 
@@ -122,31 +129,35 @@ public class EvenorApplication {
 				.description("Entrepreneur festival event description")
 				.startDate(new Date(118,2,22,10,10,10))
 				.endDate(new Date(118,2,28,10,10,10))
+				.photo("media/image/dummy/efest.jpg")
 				.adminEvent(Arrays.asList(user1))
 				.build();
 
 
         Event event3 = Event.builder()
-				.name("3Seminar Programming Java")
-				.description("Deskripsi seminar programing java")
+				.name("3 Programming Contest Carbon 3.7")
+				.description("Deskripsi kontes programing ")
 				.startDate(new Date(118,5,22,10,10,10))
 				.endDate(new Date(118,5,28,10,10,10))
+				.photo("media/image/dummy/programingcarbon.png")
 				.adminEvent(Arrays.asList(user1))
 				.build();
 
         Event event4 = Event.builder()
-				.name("4 Seminar game pembuatan flappi bird")
-				.description("deskripsi seminar pembuatan flappi bird")
+				.name("4 Seminar game nasional raion mobile game")
+				.description("deskripsi seminar game nasional ")
 				.startDate(new Date(118,1,22,10,10,10))
 				.endDate(new Date(118,1,28,10,10,10))
+				.photo("media/image/dummy/seminargame.jpg")
 				.adminEvent(Arrays.asList(user1))
 				.build();
 
         Event event5 = Event.builder()
-				.name("5 Workshop ionix dan API")
-				.description("deskripsi workshop ionix dan API")
+				.name("5 Acara Ayodev Filkom UB")
+				.description("deskripsi workshop development")
 				.startDate(new Date(118,4,22,10,10,10))
 				.endDate(new Date(118,4,28,10,10,10))
+				.photo("media/image/dummy/ayodev.jpg")
 				.adminEvent(Arrays.asList(user1))
 				.build();
 
@@ -155,6 +166,7 @@ public class EvenorApplication {
 				.description("deskripsi seminar profesi ITU")
 				.startDate(new Date(118,10,22,10,10,10))
 				.endDate(new Date(118,10,28,10,10,10))
+				.photo("media/image/dummy/seminarprofesi.jpg")
 				.adminEvent(Arrays.asList(user1))
 				.build();
 
@@ -166,18 +178,18 @@ public class EvenorApplication {
 		eventRepository.save(event5);
 		eventRepository.save(event6);
 
-		EventComittee eventComittee1 = EventComittee.builder().comittee(user1).event(event1).build();
-		EventComittee eventComittee2 = EventComittee.builder().comittee(user1).event(event2).build();
-		EventComittee eventComittee3 = EventComittee.builder().comittee(user1).event(event3).build();
-		EventComittee eventComittee4 = EventComittee.builder().comittee(user1).event(event4).build();
-		EventComittee eventComittee5 = EventComittee.builder().comittee(user1).event(event5).build();
-		EventComittee eventComittee6 = EventComittee.builder().comittee(user1).event(event6).build();
-		EventComittee eventComittee7 = EventComittee.builder().comittee(user2).event(event1).build();
-		EventComittee eventComittee8 = EventComittee.builder().comittee(user2).event(event2).build();
-		EventComittee eventComittee9 = EventComittee.builder().comittee(user3).event(event3).build();
-		EventComittee eventComittee10 = EventComittee.builder().comittee(user4).event(event4).build();
-		EventComittee eventComittee11 = EventComittee.builder().comittee(user4).event(event5).build();
-		EventComittee eventComittee12 = EventComittee.builder().comittee(user5).event(event6).build();
+		EventComittee eventComittee1 = EventComittee.builder().comittee(user1).event(event1).score(0).build();
+		EventComittee eventComittee2 = EventComittee.builder().comittee(user1).event(event2).score(0).build();
+		EventComittee eventComittee3 = EventComittee.builder().comittee(user1).event(event3).score(0).build();
+		EventComittee eventComittee4 = EventComittee.builder().comittee(user1).event(event4).score(0).build();
+		EventComittee eventComittee5 = EventComittee.builder().comittee(user1).event(event5).score(0).build();
+		EventComittee eventComittee6 = EventComittee.builder().comittee(user1).event(event6).score(0).build();
+		EventComittee eventComittee7 = EventComittee.builder().comittee(user2).event(event1).score(0).build();
+		EventComittee eventComittee8 = EventComittee.builder().comittee(user2).event(event2).score(0).build();
+		EventComittee eventComittee9 = EventComittee.builder().comittee(user3).event(event3).score(0).build();
+		EventComittee eventComittee10 = EventComittee.builder().comittee(user4).event(event4).score(0).build();
+		EventComittee eventComittee11 = EventComittee.builder().comittee(user4).event(event5).score(0).build();
+		EventComittee eventComittee12 = EventComittee.builder().comittee(user5).event(event6).score(0).build();
 
 		eventComitteeRepository.save(eventComittee1);
 		eventComitteeRepository.save(eventComittee2);
@@ -244,6 +256,19 @@ public class EvenorApplication {
         taskRepository.save(task2);
         taskRepository.save(task3);
 
+        Quest quest1 = Quest.builder().code("#ADD_EVENT")
+							.name("Menambah Event")
+							.description("membuat event baru untuk menambah point experience")
+							.score(100)
+							.build();
+		Quest quest2 = Quest.builder().code("#ADD_VOTE")
+				.name("Menambah Vote")
+				.description("membuat vote baru untuk menambah point experience dan score panitia")
+				.score(50)
+				.build();
+
+		questRepository.save(quest1);
+		questRepository.save(quest2);
 
 		builder.userDetailsService(userDetailsService(userRepository)).passwordEncoder(passwordEncoder);
 	}

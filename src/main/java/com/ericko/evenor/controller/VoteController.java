@@ -1,6 +1,7 @@
 package com.ericko.evenor.controller;
 
 import com.ericko.evenor.entity.Vote;
+import com.ericko.evenor.entity.Voter;
 import com.ericko.evenor.service.vote.VoteService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -46,29 +47,31 @@ public class VoteController {
         return checkResourceFound(voteService.getHistoryVote(id));
     }
 
-    @PostMapping("/event/{id}")
+    @PostMapping("/event/{eventId}/{userId}")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "task object", notes = "create new task")
     public @ResponseBody
     Vote createVote(
             @ApiParam(value = "the id of event")
-            @PathVariable("id") UUID id,
+            @PathVariable("eventId") UUID eventId,
+            @ApiParam(value = "the id of user")
+            @PathVariable("userId") UUID userId,
             @RequestBody Vote vote,
             HttpServletRequest request, HttpServletResponse response
     ) {
-        return checkResourceFound(voteService.createVote(id, vote));
+        return checkResourceFound(voteService.createVote(eventId, userId, vote));
     }
 
     @PostMapping("/voter/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "task object", notes = "create new task")
     public @ResponseBody
-    Vote createVoter(
+    Voter createVoter(
             @ApiParam(value = "the id of event")
             @PathVariable("id") UUID id,
-            @RequestBody Vote vote,
+            @RequestBody Voter voter,
             HttpServletRequest request, HttpServletResponse response
     ) {
-        return checkResourceFound(voteService.createVote(id, vote));
+        return checkResourceFound(voteService.createVoter(id, voter));
     }
 }

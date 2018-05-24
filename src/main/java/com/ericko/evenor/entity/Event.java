@@ -37,19 +37,20 @@ public class Event {
     private String description;
 
     @Column
+    private String photo;
+
+    @Column
     private Boolean setParticipant;
 
     @Column
     private Boolean setComittee;
 
     @Column(nullable = false)
-    @NonNull
     @DateTimeFormat
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd-MM-yyyy HH:mm:ss")
     private Date startDate;
 
     @Column(nullable = false)
-    @NonNull
     @DateTimeFormat
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd-MM-yyyy HH:mm:ss")
     private Date endDate;

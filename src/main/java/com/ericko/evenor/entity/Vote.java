@@ -1,11 +1,13 @@
 package com.ericko.evenor.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -38,10 +40,12 @@ public class Vote {
     private Integer totalVoter;
 
     @Column
+    @DateTimeFormat
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd-MM-yyyy HH:mm:ss")
     private Date endDate;
 
-    @ManyToMany(targetEntity = Option.class)
-    private List<Option> options;
+    @ManyToMany(targetEntity = Answer.class, cascade = CascadeType.ALL)
+    private List<Answer> options;
 
     @ManyToOne(targetEntity = Event.class)
     private Event event;
