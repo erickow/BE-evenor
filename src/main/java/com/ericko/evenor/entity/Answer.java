@@ -4,7 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.List;
@@ -28,6 +31,6 @@ public class Answer {
     @Column
     private Integer total;
 
-    @ManyToMany(targetEntity = Voter.class)
+    @OneToMany(targetEntity = Voter.class,orphanRemoval = true, cascade = CascadeType.REMOVE)
     private List<Voter> voters;
 }

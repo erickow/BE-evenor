@@ -1,7 +1,11 @@
 package com.ericko.evenor.service.user;
 
 import com.ericko.evenor.configuration.FilesLocationConfig;
+import com.ericko.evenor.entity.Event;
+import com.ericko.evenor.entity.EventComittee;
 import com.ericko.evenor.entity.User;
+import com.ericko.evenor.repository.EventComitteeRepository;
+import com.ericko.evenor.repository.EventRepository;
 import com.ericko.evenor.repository.UserRepository;
 import com.ericko.evenor.service.storage.StorageService;
 import org.apache.commons.io.FilenameUtils;
@@ -14,7 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -24,6 +27,12 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private EventRepository eventRepository;
+
+    @Autowired
+    private EventComitteeRepository eventComitteeRepository;
 
     @Autowired
     @Qualifier("ImageStorageService")
@@ -37,6 +46,13 @@ public class UserServiceImpl implements UserService{
     @Override
     public User getUser(UUID id) {
         return userRepository.findOne(id);
+    }
+
+    @Override
+    public EventComittee getComittee(UUID userId, UUID eventId) {
+        User comittee = userRepository.findOne(userId);
+        Event event = eventRepository.findOne(eventId);
+        return eventComitteeRepository.findByComitteeAndEvent(comittee, event);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.ericko.evenor.service.user;
 
+import com.ericko.evenor.entity.EventComittee;
 import com.ericko.evenor.entity.User;
 import org.apache.xmlbeans.impl.piccolo.io.FileFormatException;
 import org.springframework.validation.annotation.Validated;
@@ -22,6 +23,8 @@ public interface UserService {
     User updateUser( @Valid User user);
 
     void deleteUser(UUID id);
+
+    EventComittee getComittee(UUID userId, UUID eventId);
 
     List<User> searchByName(String name);
 

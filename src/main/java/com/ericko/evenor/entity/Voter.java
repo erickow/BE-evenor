@@ -22,6 +22,6 @@ public class Voter {
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
 
-    @ManyToOne(targetEntity = User.class)
-    private User user;
+    @OneToOne(targetEntity = EventComittee.class)
+    private EventComittee eventComittee;
 }

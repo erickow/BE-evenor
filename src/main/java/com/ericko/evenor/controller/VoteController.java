@@ -1,7 +1,7 @@
 package com.ericko.evenor.controller;
 
+import com.ericko.evenor.entity.Answer;
 import com.ericko.evenor.entity.Vote;
-import com.ericko.evenor.entity.Voter;
 import com.ericko.evenor.service.vote.VoteService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -62,16 +62,19 @@ public class VoteController {
         return checkResourceFound(voteService.createVote(eventId, userId, vote));
     }
 
-    @PostMapping("/voter/{id}")
+    @PostMapping("/voter/{voteId}/{answerId}/{comitteeId}")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "task object", notes = "create new task")
     public @ResponseBody
-    Voter createVoter(
-            @ApiParam(value = "the id of event")
-            @PathVariable("id") UUID id,
-            @RequestBody Voter voter,
+    Answer createVoter(
+            @ApiParam(value = "the id of option")
+            @PathVariable("voteId") UUID voteId,
+            @ApiParam(value = "the id of option")
+            @PathVariable("answerId") UUID answerId,
+            @ApiParam(value = "the id of option")
+            @PathVariable("comitteeId") UUID comitteeId,
             HttpServletRequest request, HttpServletResponse response
     ) {
-        return checkResourceFound(voteService.createVoter(id, voter));
+        return checkResourceFound(voteService.createVoter(voteId, answerId, comitteeId));
     }
 }

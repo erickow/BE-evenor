@@ -4,7 +4,6 @@ import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -46,6 +45,6 @@ public class Job {
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     private Division division;
 
-    @ManyToOne(targetEntity = JobComment.class)
+    @ManyToMany(targetEntity = JobComment.class)
     private List<JobComment> comments;
 }

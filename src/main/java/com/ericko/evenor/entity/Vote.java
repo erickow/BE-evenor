@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -44,10 +46,9 @@ public class Vote {
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd-MM-yyyy HH:mm:ss")
     private Date endDate;
 
-    @ManyToMany(targetEntity = Answer.class, cascade = CascadeType.ALL)
-    private List<Answer> options;
+    @OneToMany(targetEntity = Answer.class)
+    private List<Answer> answers;
 
     @ManyToOne(targetEntity = Event.class)
     private Event event;
-
 }

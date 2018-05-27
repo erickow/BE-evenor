@@ -1,5 +1,6 @@
 package com.ericko.evenor.controller;
 
+import com.ericko.evenor.entity.EventComittee;
 import com.ericko.evenor.entity.User;
 import com.ericko.evenor.service.user.UserService;
 import com.ericko.evenor.util.response.ResponseWrapper;
@@ -69,46 +70,34 @@ public class UserController {
             @RequestParam String username,
             HttpServletRequest request, HttpServletResponse response
     ){
-//    ) throws UnsupportedEncodingException {
-//        String url = URLDecoder.decode(username, "UTF-8");
         User result = userService.getUserByEmail(username);
         checkResourceFound(result);
         return result;
     }
 
-    @PostMapping("/photo/")
+    @PostMapping("/comittee/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "get user by id", notes = "the user is search by id")
     public @ResponseBody
-    ResponseEntity<ByteArrayResource>
-    getUserPhoto(
+    EventComittee getComittee(
+            @ApiParam(value = "the user id")
+            @PathVariable("id") UUID userId,
             @ApiParam(value = "the username of user")
-            @RequestParam("photo") String data,
+            @RequestParam UUID eventId,
             HttpServletRequest request, HttpServletResponse response
-    ) throws IOException {
-        File file = new File(data);
-        Path path = Paths.get(file.getAbsolutePath());
-        ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=" + path);
-        return ResponseEntity.ok()
-                .headers(headers)
-                .contentLength(file.length())
-                .contentType(MediaType.parseMediaType("application/octet-stream"))
-                .body(resource);
+    ){
+        return checkResourceFound(userService.getComittee(userId, eventId));
     }
 
     @PostMapping("/")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "user object", notes = "create new user")
     public @ResponseBody
     User createUser(
             @RequestBody User user,
             HttpServletRequest request, HttpServletResponse response
     ) {
-        User result = userService.createUser(user);
-        return result;
+        return userService.createUser(user);
     }
 
     @PutMapping("/edit/photo/{id}")
@@ -120,8 +109,7 @@ public class UserController {
             HttpServletRequest request, HttpServletResponse response,
             @RequestParam("file") MultipartFile file
     ) throws FileFormatException {
-        User result = userService.uploadPhoto(id, file);
-        return result;
+        return userService.uploadPhoto(id, file);
     }
 
     @PutMapping("/{id}")

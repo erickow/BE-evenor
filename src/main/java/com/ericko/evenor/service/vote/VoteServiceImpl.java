@@ -3,12 +3,11 @@ package com.ericko.evenor.service.vote;
 import com.ericko.evenor.entity.*;
 import com.ericko.evenor.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.lang.reflect.Array;
+import java.util.*;
 
 @Service
 public class VoteServiceImpl implements VoteService {
@@ -65,8 +64,8 @@ public class VoteServiceImpl implements VoteService {
         vote.setEvent(event);
         vote.setTotalVoter(eventComitteeRepository.countEventComitteeByEvent(event));
         List<Answer> answers = new ArrayList<>();
-        vote.getOptions().stream().forEach(ans -> { answers.add(answerRepository.save(ans));});
-        vote.setOptions(answers);
+        vote.getAnswers().stream().forEach(ans -> { answers.add(answerRepository.save(ans));});
+        vote.setAnswers(answers);
         Quest quest = questRepository.findByCode("#ADD_VOTE");
         comittee.setScore(comittee.getScore() + quest.getScore());
         user.setExperience(user.getExperience() + quest.getScore());
@@ -84,10 +83,23 @@ public class VoteServiceImpl implements VoteService {
     }
 
     @Override
-    public Voter createVoter(UUID id, Voter voter) {
-        userRepository.findOne(id);
-
-        return voterRepository.save(voter);
+    public Answer createVoter(UUID voteId, UUID answerId, UUID eventComitteeId) {
+        Vote vote = voteRepository.findOne(voteId);
+        EventComittee comittee = eventComitteeRepository.findOne(eventComitteeId);
+        for (Answer theAnswer : vote.getAnswers()) {
+            List<Voter> voters = theAnswer.getVoters();
+            for (Voter theVoter : voters) {
+                if (theVoter.getEventComittee().equals(comittee)){
+                    voterRepository.delete(theVoter);
+                }
+            }
+        }
+        List<Voter> listVoter = new ArrayList<>();
+        Voter voter = Voter.builder().eventComittee(comittee).build();
+        listVoter.add(voterRepository.save(voter));
+        Answer answer = answerRepository.findOne(answerId);
+        answer.setVoters(listVoter);
+        return answerRepository.save(answer);
     }
 
     @Override

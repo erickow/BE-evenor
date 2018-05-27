@@ -1,5 +1,6 @@
 package com.ericko.evenor.service.vote;
 
+import com.ericko.evenor.entity.Answer;
 import com.ericko.evenor.entity.Vote;
 import com.ericko.evenor.entity.Voter;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public interface VoteService {
 
     void deleteVote(UUID id);
 
-    Voter createVoter(UUID id, Voter voter);
+    Answer createVoter(UUID voteId, UUID answerId, UUID eventComitteeId);
 
     Voter updateVoter(Voter voter);
 }

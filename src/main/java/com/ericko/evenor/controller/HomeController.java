@@ -7,11 +7,20 @@ import com.ericko.evenor.service.user.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
@@ -60,7 +69,28 @@ public class HomeController {
             HttpServletRequest request, HttpServletResponse response
     ) {
         return userService.createUser(user);
-
     }
 
+    @PostMapping("/photo/")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "get user by id", notes = "the user is search by id")
+    public @ResponseBody
+    ResponseEntity<ByteArrayResource>
+    getImage(
+            @ApiParam(value = "the String image path")
+            @RequestParam("photo") String data,
+            HttpServletRequest request, HttpServletResponse response
+    ) throws IOException {
+        File file = new File(data);
+        Path path = Paths.get(file.getAbsolutePath());
+        ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=" + path);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(file.length())
+                .contentType(MediaType.parseMediaType("application/octet-stream"))
+                .body(resource);
+    }
 }
