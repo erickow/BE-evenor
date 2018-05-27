@@ -86,19 +86,19 @@ public class VoteServiceImpl implements VoteService {
     public Answer createVoter(UUID voteId, UUID answerId, UUID eventComitteeId) {
         Vote vote = voteRepository.findOne(voteId);
         EventComittee comittee = eventComitteeRepository.findOne(eventComitteeId);
-        for (Answer theAnswer : vote.getAnswers()) {
+        List<Answer> answer = vote.getAnswers());
+        for (Answer theAnswer : answer) {
             List<Voter> voters = theAnswer.getVoters();
             for (Voter theVoter : voters) {
                 if (theVoter.getEventComittee().equals(comittee)){
-                    voterRepository.delete(theVoter);
+                    voters.remove(theVoter);
                 }
             }
+            Answer temp = theAnswer;
+            temp.setVoter = voters;
+            answer.remove(theAnswer);
+            answer.add(temp);
         }
-        List<Voter> listVoter = new ArrayList<>();
-        Voter voter = Voter.builder().eventComittee(comittee).build();
-        listVoter.add(voterRepository.save(voter));
-        Answer answer = answerRepository.findOne(answerId);
-        answer.setVoters(listVoter);
         return answerRepository.save(answer);
     }
 
