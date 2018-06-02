@@ -236,11 +236,31 @@ public class EvenorApplication {
 		eventParticipantRepository.save(eventParticipant14);
 		eventParticipantRepository.save(eventParticipant15);
 
-		Job job1 = Job.builder().name("memesan panggung").position(1).description("panggung harus sudah dipesan").build();
-		Job job2 = Job.builder().name("Rapat panitia").position(2).description("Rapat akan diadakan pada tanggal tertera diharapkan seluruh panitia dapat datang").build();
-		Job job3 = Job.builder().name("Pesan Makanan").position(3).description("Makanan harus segera dipesan agar tidak mendadak").build();
-		Job job4 = Job.builder().name("Sewa peralatan band").position(4).description("peralatan band yang harus disewa meliputi gitar, drum dan bass").build();
-		Job job5 = Job.builder().name("Pengerjaan dokumen").position(5).description("dokumen harus dikerjakan oleh sekretaris").build();
+		Job job1 = Job.builder().name("memesan panggung").completion(false)
+				.position(1).description("panggung harus sudah dipesan")
+				.startDate(new Date(118,6,22,10,10,10))
+				.endDate(new Date(118,6,28,10,10,10))
+				.comittees(Arrays.asList(eventComittee3)).build();
+		Job job2 = Job.builder().name("Rapat panitia").completion(false)
+				.position(2).description("Rapat akan diadakan pada tanggal tertera diharapkan seluruh panitia dapat datang")
+				.startDate(new Date(118,6,22,10,10,10))
+				.endDate(new Date(118,6,28,10,10,10))
+				.comittees(Arrays.asList(eventComittee3, eventComittee9)).build();
+		Job job3 = Job.builder().name("Pesan Makanan").completion(false)
+				.position(3).description("Makanan harus segera dipesan agar tidak mendadak")
+				.startDate(new Date(118,6,22,10,10,10))
+				.endDate(new Date(118,6,28,10,10,10))
+				.comittees(Arrays.asList(eventComittee3, eventComittee9)).build();
+		Job job4 = Job.builder().name("Sewa peralatan band").completion(false)
+				.position(4).description("peralatan band yang harus disewa meliputi gitar, drum dan bass")
+				.startDate(new Date(118,6,22,10,10,10))
+				.endDate(new Date(118,6,28,10,10,10))
+				.comittees(Arrays.asList(eventComittee3)).build();
+		Job job5 = Job.builder().name("Pengerjaan dokumen").completion(false)
+				.position(5).description("dokumen harus dikerjakan oleh sekretaris")
+				.startDate(new Date(118,4,22,10,10,10))
+				.endDate(new Date(118,4,28,10,10,10))
+				.comittees(Arrays.asList(eventComittee3)).build();
 
 		jobRepository.save(job1);
         jobRepository.save(job2);
@@ -266,9 +286,21 @@ public class EvenorApplication {
 				.description("membuat vote baru untuk menambah point experience dan score panitia")
 				.score(50)
 				.build();
+		Quest quest3 = Quest.builder().code("#ADD_COMPLETION")
+				.name("Menambah Rekap")
+				.description("membuat rekap pada job yang diberikan untuk menambah point experience dan score panitia")
+				.score(100)
+				.build();
+		Quest quest4 = Quest.builder().code("#ADD_COMPLETION_LATE")
+				.name("Menambah Rekap")
+				.description("membuat rekap pada job yang diberikan untuk menambah point experience dan score panitia")
+				.score(10)
+				.build();
 
 		questRepository.save(quest1);
 		questRepository.save(quest2);
+		questRepository.save(quest3);
+		questRepository.save(quest4);
 
 		builder.userDetailsService(userDetailsService(userRepository)).passwordEncoder(passwordEncoder);
 	}

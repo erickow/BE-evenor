@@ -25,7 +25,7 @@ public interface VoteService {
 
     void deleteVote(UUID id);
 
-    Answer createVoter(UUID voteId, UUID answerId, UUID eventComitteeId);
+    List<Answer> createVoter(UUID voteId, UUID answerId, UUID eventComitteeId);
 
     Voter updateVoter(Voter voter);
 }

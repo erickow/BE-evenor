@@ -1,5 +1,6 @@
 package com.ericko.evenor.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.OnDelete;
@@ -33,17 +34,22 @@ public class Job {
     @Column
     private String description;
 
-    @Column(nullable = true)
+    @Column
     @DateTimeFormat
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd-MM-yyyy HH:mm:ss")
     private Date startDate;
 
-    @Column(nullable = true)
+    @Column
     @DateTimeFormat
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd-MM-yyyy HH:mm:ss")
     private Date endDate;
 
-    @ManyToOne(targetEntity = Division.class)
+    @Column
+    private Boolean completion;
+
+    @ManyToMany(targetEntity = EventComittee.class)
     @OnDelete(action = OnDeleteAction.NO_ACTION)
-    private Division division;
+    private List<EventComittee> comittees;
 
     @ManyToMany(targetEntity = JobComment.class)
     private List<JobComment> comments;

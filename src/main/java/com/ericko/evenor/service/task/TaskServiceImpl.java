@@ -1,14 +1,13 @@
 package com.ericko.evenor.service.task;
 
-import com.ericko.evenor.entity.Event;
-import com.ericko.evenor.entity.Job;
-import com.ericko.evenor.entity.Task;
-import com.ericko.evenor.repository.EventRepository;
-import com.ericko.evenor.repository.JobRepository;
-import com.ericko.evenor.repository.TaskRepository;
+import com.ericko.evenor.entity.*;
+import com.ericko.evenor.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sun.net.www.MimeTable;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -24,6 +23,12 @@ public class TaskServiceImpl implements TaskService {
 
     @Autowired
     private JobRepository jobRepository;
+
+    @Autowired
+    private QuestRepository questRepository;
+
+    @Autowired
+    private EventComitteeRepository eventComitteeRepository;
 
     @Override
     public List<Task> getTask() {
@@ -77,5 +82,31 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void deleteTask(UUID id) {
         taskRepository.delete(id);
+    }
+
+    @Override
+    public Job jobCompletion(UUID id, String completion, String dateCompletion) throws ParseException {
+        Job job = jobRepository.findOne(id);
+        job.setCompletion(Boolean.valueOf(completion));
+        Quest quest;
+        if (job.getEndDate().before(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(String.valueOf(dateCompletion)))){
+            quest = questRepository.findByCode("#ADD_COMPLETION");
+        }else{
+            quest = questRepository.findByCode("#ADD_COMPLETION_LATE");
+        }
+        if (Boolean.valueOf(completion)) {
+            job.getComittees().stream().forEach(comittee -> {
+                comittee.setScore(comittee.getScore() + quest.getScore());
+                comittee.getComittee().setExperience(comittee.getComittee().getExperience() + quest.getScore());
+                eventComitteeRepository.save(comittee);
+            });
+        }else{
+            job.getComittees().stream().forEach(comittee -> {
+                comittee.setScore(comittee.getScore() - quest.getScore());
+                comittee.getComittee().setExperience(comittee.getComittee().getExperience() - quest.getScore());
+                eventComitteeRepository.save(comittee);
+            });
+        }
+        return jobRepository.save(job);
     }
 }

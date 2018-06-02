@@ -66,7 +66,7 @@ public class VoteController {
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "task object", notes = "create new task")
     public @ResponseBody
-    Answer createVoter(
+    List<Answer> createVoter(
             @ApiParam(value = "the id of option")
             @PathVariable("voteId") UUID voteId,
             @ApiParam(value = "the id of option")

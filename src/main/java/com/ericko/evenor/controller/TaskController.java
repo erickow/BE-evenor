@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.ParseException;
 import java.util.List;
 import java.util.UUID;
 
@@ -84,6 +85,19 @@ public class TaskController {
             HttpServletRequest request, HttpServletResponse response
     ) {
         return checkResourceFound(taskService.createJob(id, job));
+    }
+
+    @PostMapping("/job/{id}/rekap")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "job object", notes = "create new job")
+    public @ResponseBody
+    Job jobCompletion(
+            @ApiParam(value = "the id of task") @PathVariable("id") UUID id,
+            @ApiParam(value = "String description") @RequestParam("completion") String completion,
+            @ApiParam(value = "String description") @RequestParam("dateCompletion") String dateCompletion,
+            HttpServletRequest request, HttpServletResponse response
+    ) throws ParseException {
+        return checkResourceFound(taskService.jobCompletion(id, completion, dateCompletion));
     }
 
     @PutMapping("/{id}")
