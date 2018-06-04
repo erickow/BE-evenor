@@ -83,21 +83,26 @@ public class VoteServiceImpl implements VoteService {
     }
 
     @Override
-    public List<Answer> createVoter(UUID voteId, UUID answerId, UUID eventComitteeId) {
-        Vote vote = voteRepository.findOne(voteId);
+    public List<Answer> createVoter(UUID voteId, UUID answerId, UUID eventComitteeId) { Vote vote = voteRepository.findOne(voteId);
         EventComittee comittee = eventComitteeRepository.findOne(eventComitteeId);
         List<Answer> answers = vote.getAnswers();
-        List<Answer> result = new ArrayList<>();
-
         for (Answer answer : answers) {
+            Answer answertemp = null;
             List<EventComittee> comittees = answer.getComittees();
+            List<EventComittee> tobeDeleted = new ArrayList<>();
+            if(comittees != null && comittees.size() > 0)
             for (EventComittee com : comittees) {
                 if (com.equals(comittee)){
-                    comittees.remove(com);
+                    tobeDeleted.add(com);
                 }
+//                tobeDeleted.remove(com);
             }
-            comittees.add(comittee);
-            answer.setComittees(comittees);
+            comittees.removeAll(tobeDeleted);
+            if (answer.equals(answerRepository.findOne(answerId))){
+                comittees.add(comittee);
+                answer.setComittees(comittees);
+            }
+
 //            Answer temp = theAnswer;
 //            temp.setVoters(voters);
 //            answer.remove(theAnswer);
@@ -108,7 +113,9 @@ public class VoteServiceImpl implements VoteService {
 //        listVoter.add(voterRepository.save(voter));
 //        Answer answer = answerRepository.findOne(answerId);
 //        answer.setVoters(listVoter);
-        return answerRepository.save(answers);
+        vote.setAnswers(answers);
+        Vote result = voteRepository.save(vote);
+        return result.getAnswers();
     }
 
 

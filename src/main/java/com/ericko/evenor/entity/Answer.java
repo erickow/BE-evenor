@@ -31,6 +31,6 @@ public class Answer {
     @Column
     private Integer total;
 
-    @OneToMany(targetEntity = EventComittee.class, cascade = CascadeType.ALL)
+    @ManyToMany(targetEntity = EventComittee.class)
     private List<EventComittee> comittees;
 }
