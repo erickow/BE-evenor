@@ -86,26 +86,31 @@ public class VoteServiceImpl implements VoteService {
     public List<Answer> createVoter(UUID voteId, UUID answerId, UUID eventComitteeId) {
         Vote vote = voteRepository.findOne(voteId);
         EventComittee comittee = eventComitteeRepository.findOne(eventComitteeId);
-        List<Answer> answer = vote.getAnswers();
-        for (Answer theAnswer : answer) {
-            List<Voter> voters = theAnswer.getVoters();
-            for (Voter theVoter : voters) {
-                if (theVoter.getEventComittee().equals(comittee)){
-                    voters.remove(theVoter);
+        List<Answer> answers = vote.getAnswers();
+        List<Answer> result = new ArrayList<>();
+
+        for (Answer answer : answers) {
+            List<EventComittee> comittees = answer.getComittees();
+            for (EventComittee com : comittees) {
+                if (com.equals(comittee)){
+                    comittees.remove(com);
                 }
             }
-            Answer temp = theAnswer;
-            temp.setVoters(voters);
-            answer.remove(theAnswer);
-            answer.add(temp);
+            comittees.add(comittee);
+            answer.setComittees(comittees);
+//            Answer temp = theAnswer;
+//            temp.setVoters(voters);
+//            answer.remove(theAnswer);
+//            answer.add(temp);
         }
 //        List<Voter> listVoter = new ArrayList<>();
 //        Voter voter = Voter.builder().eventComittee(comittee).build();
 //        listVoter.add(voterRepository.save(voter));
 //        Answer answer = answerRepository.findOne(answerId);
 //        answer.setVoters(listVoter);
-        return answerRepository.save(answer);
+        return answerRepository.save(answers);
     }
+
 
     @Override
     public Voter updateVoter(Voter voter) {

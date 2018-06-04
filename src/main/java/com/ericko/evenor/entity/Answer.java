@@ -31,6 +31,6 @@ public class Answer {
     @Column
     private Integer total;
 
-    @OneToMany(targetEntity = Voter.class,orphanRemoval = true, cascade = CascadeType.REMOVE)
-    private List<Voter> voters;
+    @OneToMany(targetEntity = EventComittee.class, cascade = CascadeType.ALL)
+    private List<EventComittee> comittees;
 }

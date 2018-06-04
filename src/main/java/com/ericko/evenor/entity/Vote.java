@@ -46,7 +46,7 @@ public class Vote {
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd-MM-yyyy HH:mm:ss")
     private Date endDate;
 
-    @OneToMany(targetEntity = Answer.class)
+    @OneToMany(targetEntity = Answer.class, cascade = CascadeType.ALL)
     private List<Answer> answers;
 
     @ManyToOne(targetEntity = Event.class)
