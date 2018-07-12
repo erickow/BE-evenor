@@ -83,36 +83,30 @@ public class VoteServiceImpl implements VoteService {
     }
 
     @Override
-    public List<Answer> createVoter(UUID voteId, UUID answerId, UUID eventComitteeId) { Vote vote = voteRepository.findOne(voteId);
+    public List<Answer> createVoter(UUID voteId, UUID answerId, UUID eventComitteeId) {
+        Vote vote = voteRepository.findOne(voteId);
         EventComittee comittee = eventComitteeRepository.findOne(eventComitteeId);
         List<Answer> answers = vote.getAnswers();
+        Quest quest = questRepository.findByCode("#ADD_VOTING");
         for (Answer answer : answers) {
-            Answer answertemp = null;
             List<EventComittee> comittees = answer.getComittees();
             List<EventComittee> tobeDeleted = new ArrayList<>();
-            if(comittees != null && comittees.size() > 0)
-            for (EventComittee com : comittees) {
-                if (com.equals(comittee)){
-                    tobeDeleted.add(com);
+            if(comittees != null && comittees.size() > 0) {
+                for (EventComittee com : comittees) {
+                    if (com.equals(comittee)) {
+                        tobeDeleted.add(com);
+                        com.setScore(com.getScore() - quest.getScore());
+                        eventComitteeRepository.save(com);
+                    }
                 }
-//                tobeDeleted.remove(com);
+                comittees.removeAll(tobeDeleted);
             }
-            comittees.removeAll(tobeDeleted);
             if (answer.equals(answerRepository.findOne(answerId))){
+                comittee.setScore(comittee.getScore() + quest.getScore());
                 comittees.add(comittee);
                 answer.setComittees(comittees);
             }
-
-//            Answer temp = theAnswer;
-//            temp.setVoters(voters);
-//            answer.remove(theAnswer);
-//            answer.add(temp);
         }
-//        List<Voter> listVoter = new ArrayList<>();
-//        Voter voter = Voter.builder().eventComittee(comittee).build();
-//        listVoter.add(voterRepository.save(voter));
-//        Answer answer = answerRepository.findOne(answerId);
-//        answer.setVoters(listVoter);
         vote.setAnswers(answers);
         Vote result = voteRepository.save(vote);
         return result.getAnswers();

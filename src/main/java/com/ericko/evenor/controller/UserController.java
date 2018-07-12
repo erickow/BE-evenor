@@ -1,7 +1,9 @@
 package com.ericko.evenor.controller;
 
 import com.ericko.evenor.entity.EventComittee;
+import com.ericko.evenor.entity.Review;
 import com.ericko.evenor.entity.User;
+import com.ericko.evenor.entity.Volunteer;
 import com.ericko.evenor.service.user.UserService;
 import com.ericko.evenor.util.response.ResponseWrapper;
 import io.swagger.annotations.ApiOperation;
@@ -61,6 +63,34 @@ public class UserController {
         return result;
     }
 
+    @GetMapping("/volunteer")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "get event by id and type", notes = "the event is search by id and type")
+    public @ResponseBody
+    List<Volunteer> getVolunteer(
+            @ApiParam(value = "the id of event")
+            @PathVariable UUID eventId,
+            @ApiParam(value = "the type of volunteer")
+            @PathVariable String type,
+            HttpServletRequest request, HttpServletResponse response
+    ) {
+        List<Volunteer> result = userService.getVolunteer(eventId, type);
+        return checkResourceFound(result);
+    }
+
+    @GetMapping("/review")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "get review by user id", notes = "the review is search by user id")
+    public @ResponseBody
+    Review getReview(
+            @ApiParam(value = "the id of user")
+            @PathVariable UUID userId,
+            HttpServletRequest request, HttpServletResponse response
+    ) {
+        Review result = userService.getReview(userId);
+        return checkResourceFound(result);
+    }
+
     @PostMapping("/account/")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "get user by id", notes = "the user is search by id")
@@ -100,6 +130,40 @@ public class UserController {
         return userService.createUser(user);
     }
 
+    @PostMapping("/volunteer/{id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "user object", notes = "create new user")
+    public @ResponseBody
+    Volunteer createVolunteer(
+            @ApiParam(value = "the user id")
+            @PathVariable("id") UUID userId,
+            @ApiParam(value = "the event id")
+            @RequestParam UUID eventId,
+            @ApiParam(value = "type volunteer")
+            @RequestParam String type,
+            HttpServletRequest request, HttpServletResponse response
+    ) {
+        return userService.createVolunteer(userId, eventId, type);
+    }
+
+    @PostMapping("/review")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "event data", notes = "create new event")
+    public @ResponseBody
+    Review createReview(
+            @ApiParam(value = "user id") @RequestParam("userId") UUID userId,
+            @ApiParam(value = "reviewer id") @RequestParam("reviewerId") UUID reviewerId,
+            @ApiParam(value = "event id") @RequestParam("eventId") UUID eventId,
+            @ApiParam(value = "integer leadership score") @RequestParam("leadership") Integer leadership,
+            @ApiParam(value = "integer authority score") @RequestParam("authority") Integer authority,
+            @ApiParam(value = "integer decision score") @RequestParam("decision") Integer decision,
+            @ApiParam(value = "integer flexibility score") @RequestParam("flexibility") Integer flexibility,
+            HttpServletRequest request, HttpServletResponse response
+    ) {
+        Review result = userService.createReview(userId,reviewerId, eventId, leadership, authority, decision, flexibility);
+        return result;
+    }
+
     @PutMapping("/edit/photo/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "user object", notes = "create new user")
@@ -134,6 +198,18 @@ public class UserController {
             HttpServletRequest request, HttpServletResponse response
     ) {
         userService.deleteUser(id);
+    }
+
+    @DeleteMapping("/volunteer/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "user id" , notes = "delete user by id")
+    public @ResponseBody
+    void deleteVolunteer(
+            @ApiParam(value = "the volunteer id")
+            @PathVariable("id") UUID volunteerId,
+            HttpServletRequest request, HttpServletResponse response
+    ) {
+        userService.deleteVolunteer(volunteerId);
     }
 
     @GetMapping("/search/name/{name}")

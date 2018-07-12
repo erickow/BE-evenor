@@ -6,6 +6,7 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,4 +34,6 @@ public interface TaskService {
     void deleteTask(UUID id);
 
     Job jobCompletion(UUID id, String completion, String dateCompletion) throws ParseException;
+
+    Job createJobComment(UUID jobId, UUID userId, String comment, Date date);
 }

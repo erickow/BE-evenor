@@ -1,13 +1,10 @@
 package com.ericko.evenor.service.user;
 
 import com.ericko.evenor.configuration.FilesLocationConfig;
-import com.ericko.evenor.entity.Event;
-import com.ericko.evenor.entity.EventComittee;
-import com.ericko.evenor.entity.User;
-import com.ericko.evenor.repository.EventComitteeRepository;
-import com.ericko.evenor.repository.EventRepository;
-import com.ericko.evenor.repository.UserRepository;
+import com.ericko.evenor.entity.*;
+import com.ericko.evenor.repository.*;
 import com.ericko.evenor.service.storage.StorageService;
+import io.swagger.annotations.ApiParam;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.xmlbeans.impl.piccolo.io.FileFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +29,13 @@ public class UserServiceImpl implements UserService{
     private EventRepository eventRepository;
 
     @Autowired
+    private VolunteerRepository volunteerRepository;
+
+    @Autowired
     private EventComitteeRepository eventComitteeRepository;
+
+    @ApiParam
+    private ReviewRepository reviewRepository;
 
     @Autowired
     @Qualifier("ImageStorageService")
@@ -95,6 +98,78 @@ public class UserServiceImpl implements UserService{
         }
         user.setPhoto(imageName);
         return userRepository.save(user);
+    }
+
+    @Override
+    public List<Volunteer> getVolunteer(UUID eventId, String type) {
+        Event event = eventRepository.findOne(eventId);
+        return volunteerRepository.findAllByEventAndType(event, type);
+    }
+
+    @Override
+    public Volunteer createVolunteer(UUID userId, UUID eventId, String type) {
+        User user = userRepository.findOne(userId);
+        Event event = eventRepository.findOne(eventId);
+        Volunteer volunteer = new Volunteer();
+        volunteer.setUser(user);
+        volunteer.setEvent(event);
+        volunteer.setType(type);
+        return volunteerRepository.save(volunteer);
+    }
+
+    @Override
+    public void deleteVolunteer(UUID volunteerId) {
+        volunteerRepository.delete(volunteerId);
+    }
+
+    @Override
+    public Review getReview(UUID userId) {
+        User user = userRepository.findOne(userId);
+        List<Review> reviews = reviewRepository.findAllByUser(user);
+        Review result = new Review();
+        if(!reviews.isEmpty()){
+            for (Review review : reviews){
+                result.setLeadership(result.getLeadership() + review.getLeadership());
+                result.setAuthority(result.getAuthority() + review.getAuthority());
+                result.setDecision(result.getDecision() + review.getDecision());
+                result.setFlexibility(result.getFlexibility() + review.getFlexibility());
+            }
+            result.setLeadership(result.getLeadership()/reviews.size());
+            result.setAuthority(result.getAuthority()/reviews.size());
+            result.setDecision(result.getDecision()/reviews.size());
+            result.setFlexibility(result.getFlexibility()/reviews.size());
+        }else{
+            result.setLeadership(0);
+            result.setAuthority(0);
+            result.setDecision(0);
+            result.setFlexibility(0);
+        }
+        return reviewRepository.save(result);
+    }
+
+    @Override
+    public Review createReview(UUID userId,UUID reviewerId, UUID eventId, Integer leadership, Integer authority, Integer decision, Integer flexibility) {
+        User user = userRepository.findOne(userId);
+        User reviewer = userRepository.findOne(reviewerId);
+        Event event = eventRepository.findOne(eventId);
+        Review review = new Review();
+        Review checkReview = reviewRepository.findByUserAndReviewerAndEvent(user, reviewer, event);
+        if (checkReview == null){
+            review.setUser(user);
+            review.setReviewer(reviewer);
+            review.setEvent(event);
+            review.setLeadership(leadership);
+            review.setAuthority(authority);
+            review.setDecision(decision);
+            review.setFlexibility(flexibility);
+        }else{
+            checkReview.setLeadership(leadership);
+            checkReview.setAuthority(authority);
+            checkReview.setDecision(decision);
+            checkReview.setFlexibility(flexibility);
+            review = checkReview;
+        }
+        return reviewRepository.save(review);
     }
 
     @Bean

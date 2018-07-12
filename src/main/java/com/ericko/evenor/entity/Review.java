@@ -6,19 +6,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.UUID;
 
-@Entity
 @Data
+@Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class Quest {
-
+public class Review {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
@@ -26,18 +22,24 @@ public class Quest {
     private UUID id;
 
     @Column
-    private String code;
+    private Integer leadership;
 
     @Column
-    private String name;
+    private Integer authority;
 
     @Column
-    private String description;
+    private Integer decision;
 
     @Column
-    private Integer score;
+    private Integer flexibility;
 
-    @Column
-    private String type;
+    @ManyToOne(targetEntity = User.class)
+    private User user;
+
+    @ManyToOne(targetEntity = User.class)
+    private User reviewer;
+
+    @ManyToOne(targetEntity = Event.class)
+    private Event event;
 
 }

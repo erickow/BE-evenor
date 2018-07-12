@@ -6,38 +6,27 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.UUID;
 
-@Entity
 @Data
+@Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class Quest {
-
+public class Volunteer {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
 
-    @Column
-    private String code;
-
-    @Column
-    private String name;
-
-    @Column
-    private String description;
-
-    @Column
-    private Integer score;
+    @ManyToOne(targetEntity = User.class)
+    private User user;
 
     @Column
     private String type;
 
+    @ManyToOne(targetEntity = Event.class)
+    private Event event;
 }

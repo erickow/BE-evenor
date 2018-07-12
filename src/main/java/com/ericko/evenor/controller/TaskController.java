@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -61,6 +62,20 @@ public class TaskController {
         return result;
     }
 
+    @GetMapping("/job/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "get job by id", notes = "the job is search by id")
+    public @ResponseBody
+    Job getJob(
+            @ApiParam(value = "the id of job")
+            @PathVariable UUID id,
+            HttpServletRequest request, HttpServletResponse response
+    ) {
+        Job result = taskService.getJob(id);
+        checkResourceFound(result);
+        return result;
+    }
+
     @PostMapping("/event/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "task object", notes = "create new task")
@@ -100,6 +115,19 @@ public class TaskController {
         return checkResourceFound(taskService.jobCompletion(id, completion, dateCompletion));
     }
 
+    @PostMapping("/comment/{id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "job object", notes = "create new job")
+    public @ResponseBody
+    Job createJob(
+            @ApiParam(value = "the id of job") @PathVariable("id") UUID jobId,
+            @ApiParam(value = "user id") @RequestParam("userId") UUID userId,
+            @ApiParam(value = "String comment") @RequestParam("comment") String comment,
+            HttpServletRequest request, HttpServletResponse response
+    ) {
+        return checkResourceFound(taskService.createJobComment(jobId, userId, comment, new Date()));
+    }
+
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "task object", notes = "updating task data by id")
@@ -124,17 +152,5 @@ public class TaskController {
         taskService.deleteTask(id);
     }
 
-    @GetMapping("/job/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "get job by id", notes = "the job is search by id")
-    public @ResponseBody
-    Job getJob(
-            @ApiParam(value = "the id of job")
-            @PathVariable UUID id,
-            HttpServletRequest request, HttpServletResponse response
-    ) {
-        Job result = taskService.getJob(id);
-        checkResourceFound(result);
-        return result;
-    }
+
 }

@@ -2,7 +2,6 @@ package com.ericko.evenor;
 
 import com.ericko.evenor.entity.*;
 import com.ericko.evenor.repository.*;
-import com.ericko.evenor.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -122,6 +121,8 @@ public class EvenorApplication {
 				.endDate( new Date(118,3,28,10,10,10))
 				.photo("media/image/dummy/donordarah.jpg")
 				.adminEvent(Arrays.asList(user1))
+				.setComittee(true)
+				.setParticipant(true)
 				.build();
 
         Event event2 = Event.builder()
@@ -131,6 +132,8 @@ public class EvenorApplication {
 				.endDate(new Date(118,2,28,10,10,10))
 				.photo("media/image/dummy/efest.jpg")
 				.adminEvent(Arrays.asList(user1))
+				.setComittee(true)
+				.setParticipant(true)
 				.build();
 
 
@@ -141,6 +144,8 @@ public class EvenorApplication {
 				.endDate(new Date(118,5,28,10,10,10))
 				.photo("media/image/dummy/programingcarbon.png")
 				.adminEvent(Arrays.asList(user1))
+				.setComittee(true)
+				.setParticipant(true)
 				.build();
 
         Event event4 = Event.builder()
@@ -150,6 +155,8 @@ public class EvenorApplication {
 				.endDate(new Date(118,1,28,10,10,10))
 				.photo("media/image/dummy/seminargame.jpg")
 				.adminEvent(Arrays.asList(user1))
+				.setComittee(true)
+				.setParticipant(true)
 				.build();
 
         Event event5 = Event.builder()
@@ -159,6 +166,8 @@ public class EvenorApplication {
 				.endDate(new Date(118,4,28,10,10,10))
 				.photo("media/image/dummy/ayodev.jpg")
 				.adminEvent(Arrays.asList(user1))
+				.setComittee(true)
+				.setParticipant(true)
 				.build();
 
         Event event6 = Event.builder()
@@ -168,6 +177,8 @@ public class EvenorApplication {
 				.endDate(new Date(118,10,28,10,10,10))
 				.photo("media/image/dummy/seminarprofesi.jpg")
 				.adminEvent(Arrays.asList(user1))
+				.setComittee(true)
+				.setParticipant(true)
 				.build();
 
 
@@ -286,21 +297,28 @@ public class EvenorApplication {
 				.description("membuat vote baru untuk menambah point experience dan score panitia")
 				.score(50)
 				.build();
-		Quest quest3 = Quest.builder().code("#ADD_COMPLETION")
+		Quest quest3 = Quest.builder().code("#ADD_VOTING")
+				.name("Menambah Voting")
+				.description("melakukan voting pada vote yang ada untuk menambah point experience dan score panitia")
+				.score(50)
+				.build();
+		Quest quest4 = Quest.builder().code("#ADD_COMPLETION")
 				.name("Menambah Rekap")
 				.description("membuat rekap pada job yang diberikan untuk menambah point experience dan score panitia")
 				.score(100)
 				.build();
-		Quest quest4 = Quest.builder().code("#ADD_COMPLETION_LATE")
+		Quest quest5 = Quest.builder().code("#ADD_COMPLETION_LATE")
 				.name("Menambah Rekap")
 				.description("membuat rekap pada job yang diberikan untuk menambah point experience dan score panitia")
-				.score(10)
+				.score(25)
 				.build();
+
 
 		questRepository.save(quest1);
 		questRepository.save(quest2);
 		questRepository.save(quest3);
 		questRepository.save(quest4);
+		questRepository.save(quest5);
 
 		builder.userDetailsService(userDetailsService(userRepository)).passwordEncoder(passwordEncoder);
 	}

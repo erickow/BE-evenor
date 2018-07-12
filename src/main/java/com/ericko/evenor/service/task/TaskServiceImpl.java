@@ -9,6 +9,7 @@ import sun.net.www.MimeTable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,6 +30,12 @@ public class TaskServiceImpl implements TaskService {
 
     @Autowired
     private EventComitteeRepository eventComitteeRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private JobCommentRepository jobCommentRepository;
 
     @Override
     public List<Task> getTask() {
@@ -107,6 +114,15 @@ public class TaskServiceImpl implements TaskService {
                 eventComitteeRepository.save(comittee);
             });
         }
+        return jobRepository.save(job);
+    }
+
+    @Override
+    public Job createJobComment(UUID jobId, UUID userId, String comment, Date date) {
+        Job job = jobRepository.findOne(jobId);
+        User user = userRepository.findOne(userId);
+        JobComment jobComment = JobComment.builder().comment(comment).date(date).build();
+        job.setComments(Arrays.asList(jobCommentRepository.save(jobComment)));
         return jobRepository.save(job);
     }
 }
