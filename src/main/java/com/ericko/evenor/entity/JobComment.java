@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -30,6 +32,11 @@ public class JobComment {
     @DateTimeFormat
     private Date date;
 
-    @ManyToOne(targetEntity = User.class)
+    @ManyToOne(targetEntity = User.class, cascade = CascadeType.REMOVE)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     private User user;
+
+    @ManyToOne(targetEntity = Job.class, cascade = CascadeType.REMOVE)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
+    private Job job;
 }

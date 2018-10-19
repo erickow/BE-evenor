@@ -1,7 +1,10 @@
 package com.ericko.evenor.controller;
 
 import com.ericko.evenor.entity.Answer;
+import com.ericko.evenor.entity.EventComittee;
 import com.ericko.evenor.entity.Vote;
+import com.ericko.evenor.repository.EventComitteeRepository;
+import com.ericko.evenor.service.activity.ActivityService;
 import com.ericko.evenor.service.vote.VoteService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -22,6 +25,12 @@ public class VoteController {
 
     @Autowired
     private VoteService voteService;
+
+    @Autowired
+    private ActivityService activityService;
+
+    @Autowired
+    private EventComitteeRepository eventComitteeRepository;
 
     @GetMapping("/upcoming/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -59,7 +68,11 @@ public class VoteController {
             @RequestBody Vote vote,
             HttpServletRequest request, HttpServletResponse response
     ) {
-        return checkResourceFound(voteService.createVote(eventId, userId, vote));
+        Vote vote1 = voteService.createVote(eventId, userId, vote);
+        if(vote != null){
+            activityService.createActivity("Membuat Vote", userId, eventId);
+        }
+        return vote1;
     }
 
     @PostMapping("/voter/{voteId}/{answerId}/{comitteeId}")
@@ -75,6 +88,12 @@ public class VoteController {
             @PathVariable("comitteeId") UUID comitteeId,
             HttpServletRequest request, HttpServletResponse response
     ) {
-        return checkResourceFound(voteService.createVoter(voteId, answerId, comitteeId));
+        List<Answer> result = voteService.createVoter(voteId, answerId, comitteeId);
+        EventComittee comittee = eventComitteeRepository.findOne(comitteeId);
+
+        activityService.createActivity("Melakukan Vote pada Event",
+                                        comittee.getComittee().getId(),
+                                        comittee.getEvent().getId());
+        return result;
     }
 }

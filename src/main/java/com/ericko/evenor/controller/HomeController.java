@@ -61,7 +61,7 @@ public class HomeController {
     }
 
     @PostMapping("/register")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "user object", notes = "create new user")
     public @ResponseBody
     User createUser(

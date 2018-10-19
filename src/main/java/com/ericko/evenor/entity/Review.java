@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -33,13 +35,16 @@ public class Review {
     @Column
     private Integer flexibility;
 
-    @ManyToOne(targetEntity = User.class)
+    @ManyToOne(targetEntity = User.class, cascade = CascadeType.REMOVE)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     private User user;
 
-    @ManyToOne(targetEntity = User.class)
+    @ManyToOne(targetEntity = User.class, cascade = CascadeType.REMOVE)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     private User reviewer;
 
-    @ManyToOne(targetEntity = Event.class)
+    @ManyToOne(targetEntity = Event.class, cascade = CascadeType.REMOVE)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     private Event event;
 
 }

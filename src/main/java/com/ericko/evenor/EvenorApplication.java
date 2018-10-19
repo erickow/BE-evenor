@@ -42,12 +42,13 @@ public class EvenorApplication {
 			EventParticipantRepository eventParticipantRepository,
 			JobRepository jobRepository,
             TaskRepository taskRepository,
-			QuestRepository questRepository
+			QuestRepository questRepository,
+			ActivityRepository activityRepository
     ) throws Exception {
 		//Setup a default user if db is empty
 		Role role1 = new Role("admin","admin description");
 		Role role2 = new Role("comittee","comittee desc");
-		Role role3 = new Role("participant","participant desc");
+		Role role3 = new Role("manager","manager desc");
 		Role role4 = new Role("client","client desc");
 
 		roleRepository.save(role1);
@@ -66,40 +67,40 @@ public class EvenorApplication {
 				.build();
 
 		User user2 = User.builder()
+				.name("manager")
+				.email("manager@mail.com")
+				.password("manager")
+				.active(false)
+				.photo("media/image/default/default_avatar.jpg")
+                .experience(0)
+				.roles(Arrays.asList( role2, role3 ))
+				.build();
+		User user3 = User.builder()
 				.name("comittee1")
-				.email("com1@mail.com")
+				.email("comittee1@mail.com")
 				.password("comittee1")
 				.active(false)
 				.photo("media/image/default/default_avatar.jpg")
                 .experience(0)
-				.roles(Arrays.asList( role2, role3, role4 ))
+				.roles(Arrays.asList( role2 ))
 				.build();
-		User user3 = User.builder()
+		User user4 = User.builder()
 				.name("comittee2")
-				.email("com2@mail.com")
+				.email("comittee2@mail.com")
 				.password("comittee2")
 				.active(false)
 				.photo("media/image/default/default_avatar.jpg")
                 .experience(0)
-				.roles(Arrays.asList( role2, role3, role4 ))
-				.build();
-		User user4 = User.builder()
-				.name("participant")
-				.email("par1@mail.com")
-				.password("participant1")
-				.active(false)
-				.photo("media/image/default/default_avatar.jpg")
-                .experience(0)
-				.roles(Arrays.asList( role2, role3, role4 ))
+				.roles(Arrays.asList( role2, role4 ))
 				.build();
 		User user5 = User.builder()
-				.name("participan2")
-				.email("par2@mail.com")
-				.password("participant2")
+				.name("comittee3")
+				.email("comittee3@mail.com")
+				.password("comittee3")
 				.active(false)
 				.photo("media/image/default/default_avatar.jpg")
                 .experience(0)
-				.roles(Arrays.asList( role2, role3, role4 ))
+				.roles(Arrays.asList( role2, role4 ))
 				.build();
 
 		user1.setPassword(getPasswordEncoder().encode(user1.getPassword()));
@@ -115,70 +116,70 @@ public class EvenorApplication {
 
 
         Event event1 = Event.builder()
-				.name("1 Donor Darah")
+				.name("Donor Darah Filkom")
 				.description("Donor darah event")
 				.startDate(new Date(118,3,22,10,10,10))
 				.endDate( new Date(118,3,28,10,10,10))
 				.photo("media/image/dummy/donordarah.jpg")
-				.adminEvent(Arrays.asList(user1))
 				.setComittee(true)
 				.setParticipant(true)
+                .category("social")
 				.build();
 
         Event event2 = Event.builder()
-				.name("2 Entrepreneure Festival")
+				.name("Entrepreneure Festival")
 				.description("Entrepreneur festival event description")
 				.startDate(new Date(118,2,22,10,10,10))
 				.endDate(new Date(118,2,28,10,10,10))
 				.photo("media/image/dummy/efest.jpg")
-				.adminEvent(Arrays.asList(user1))
 				.setComittee(true)
 				.setParticipant(true)
+				.category("business")
 				.build();
 
 
         Event event3 = Event.builder()
-				.name("3 Programming Contest Carbon 3.7")
+				.name("Programming Contest Carbon 3.7")
 				.description("Deskripsi kontes programing ")
-				.startDate(new Date(118,5,22,10,10,10))
-				.endDate(new Date(118,5,28,10,10,10))
+				.startDate(new Date(118,9,22,10,10,10))
+				.endDate(new Date(118,10,28,10,10,10))
 				.photo("media/image/dummy/programingcarbon.png")
-				.adminEvent(Arrays.asList(user1))
 				.setComittee(true)
 				.setParticipant(true)
+                .category("education")
 				.build();
 
         Event event4 = Event.builder()
-				.name("4 Seminar game nasional raion mobile game")
+				.name("Seminar game nasional raion")
 				.description("deskripsi seminar game nasional ")
 				.startDate(new Date(118,1,22,10,10,10))
 				.endDate(new Date(118,1,28,10,10,10))
 				.photo("media/image/dummy/seminargame.jpg")
-				.adminEvent(Arrays.asList(user1))
 				.setComittee(true)
 				.setParticipant(true)
+                .category("education")
 				.build();
 
         Event event5 = Event.builder()
-				.name("5 Acara Ayodev Filkom UB")
+				.name("Acara Ayodev Filkom UB")
 				.description("deskripsi workshop development")
 				.startDate(new Date(118,4,22,10,10,10))
 				.endDate(new Date(118,4,28,10,10,10))
 				.photo("media/image/dummy/ayodev.jpg")
-				.adminEvent(Arrays.asList(user1))
 				.setComittee(true)
 				.setParticipant(true)
+                .category("social")
 				.build();
 
         Event event6 = Event.builder()
-				.name("6 Seminar Profesi ITU")
-				.description("deskripsi seminar profesi ITU")
+				.name("Seminar Profesi IT")
+				.description("deskripsi seminar profesi IT")
 				.startDate(new Date(118,10,22,10,10,10))
 				.endDate(new Date(118,10,28,10,10,10))
 				.photo("media/image/dummy/seminarprofesi.jpg")
-				.adminEvent(Arrays.asList(user1))
 				.setComittee(true)
 				.setParticipant(true)
+                .category("education")
 				.build();
 
 
@@ -249,28 +250,52 @@ public class EvenorApplication {
 
 		Job job1 = Job.builder().name("memesan panggung").completion(false)
 				.position(1).description("panggung harus sudah dipesan")
+				.level("medium")
 				.startDate(new Date(118,6,22,10,10,10))
-				.endDate(new Date(118,6,28,10,10,10))
+				.endDate(new Date(118,6,25,10,10,10))
 				.comittees(Arrays.asList(eventComittee3)).build();
 		Job job2 = Job.builder().name("Rapat panitia").completion(false)
 				.position(2).description("Rapat akan diadakan pada tanggal tertera diharapkan seluruh panitia dapat datang")
-				.startDate(new Date(118,6,22,10,10,10))
+				.level("easy")
+				.startDate(new Date(118,6,24,10,10,10))
 				.endDate(new Date(118,6,28,10,10,10))
 				.comittees(Arrays.asList(eventComittee3, eventComittee9)).build();
 		Job job3 = Job.builder().name("Pesan Makanan").completion(false)
 				.position(3).description("Makanan harus segera dipesan agar tidak mendadak")
-				.startDate(new Date(118,6,22,10,10,10))
-				.endDate(new Date(118,6,28,10,10,10))
+				.level("medium")
+				.startDate(new Date(118,6,23,10,10,10))
+				.endDate(new Date(118,6,24		,10,10,10))
 				.comittees(Arrays.asList(eventComittee3, eventComittee9)).build();
 		Job job4 = Job.builder().name("Sewa peralatan band").completion(false)
 				.position(4).description("peralatan band yang harus disewa meliputi gitar, drum dan bass")
+				.level("hard")
 				.startDate(new Date(118,6,22,10,10,10))
 				.endDate(new Date(118,6,28,10,10,10))
 				.comittees(Arrays.asList(eventComittee3)).build();
 		Job job5 = Job.builder().name("Pengerjaan dokumen").completion(false)
 				.position(5).description("dokumen harus dikerjakan oleh sekretaris")
+				.level("hard")
 				.startDate(new Date(118,4,22,10,10,10))
 				.endDate(new Date(118,4,28,10,10,10))
+				.comittees(Arrays.asList(eventComittee3)).build();
+
+		Job job6 = Job.builder().name("pencarian sponsor").completion(false)
+				.position(6).description("sponsor harus di cari secepatnya")
+				.level("hard")
+				.startDate(new Date(118,6,12,10,10,10))
+				.endDate(new Date(118,6,14,10,10,10))
+				.comittees(Arrays.asList(eventComittee3)).build();
+		Job job7 = Job.builder().name("desain spanduk").completion(false)
+				.position(7).description("spanduk harus dikerjakan secepatnya")
+				.level("medium")
+				.startDate(new Date(118,6,15,10,10,10))
+				.endDate(new Date(118,6,17,10,10,10))
+				.comittees(Arrays.asList(eventComittee3)).build();
+		Job job8 = Job.builder().name("Mencari guest star").completion(false)
+				.position(8).description("guest star musik yang barkaitan dengan acara")
+				.level("hard")
+				.startDate(new Date(118,6,1,10,10,10))
+				.endDate(new Date(118,6,3,10,10,10))
 				.comittees(Arrays.asList(eventComittee3)).build();
 
 		jobRepository.save(job1);
@@ -278,8 +303,11 @@ public class EvenorApplication {
         jobRepository.save(job3);
         jobRepository.save(job4);
         jobRepository.save(job5);
+		jobRepository.save(job6);
+		jobRepository.save(job7);
+		jobRepository.save(job8);
 
-		Task task1 = Task.builder().name("List").position(1).event(event3).jobs(Arrays.asList(job1,job2,job3)).build();
+		Task task1 = Task.builder().name("List").position(1).event(event3).jobs(Arrays.asList(job1,job2,job3,job6,job7,job8)).build();
         Task task2 = Task.builder().name("On going").position(2).event(event3).jobs(Arrays.asList(job4)).build();
         Task task3 = Task.builder().name("Done").position(3).event(event3).jobs(Arrays.asList(job5)).build();
 
@@ -319,6 +347,43 @@ public class EvenorApplication {
 		questRepository.save(quest3);
 		questRepository.save(quest4);
 		questRepository.save(quest5);
+
+        Activity activity1 = Activity.builder().name("Membuat Event Carbon 3.7")
+                .user(user1)
+                .event(event3)
+                .date(new Date(118, 9, 20, 10, 10, 10))
+                .build();
+
+        Activity activity2 = Activity.builder().name("Membuat Job memesan panggung")
+                .user(user1)
+                .event(event3)
+                .date(new Date(118, 9, 22, 10, 10, 10))
+                .build();
+
+        Activity activity3 = Activity.builder().name("Membuat Job memesan makanan")
+                .user(user1)
+                .event(event3)
+                .date(new Date(118, 9, 24, 10, 10, 10))
+                .build();
+
+        Activity activity4 = Activity.builder().name("Membuat Job menyewa peralatan")
+                .user(user1)
+                .event(event3)
+                .date(new Date(118, 9, 25, 10, 10, 10))
+                .build();
+
+        Activity activity5 = Activity.builder().name("Membuat Job pengerjaan dokumen")
+                .user(user1)
+                .event(event3)
+                .date(new Date(118, 9, 23, 10, 10, 10))
+                .build();
+
+        activityRepository.save(activity1);
+        activityRepository.save(activity2);
+        activityRepository.save(activity3);
+        activityRepository.save(activity4);
+        activityRepository.save(activity5);
+
 
 		builder.userDetailsService(userDetailsService(userRepository)).passwordEncoder(passwordEncoder);
 	}

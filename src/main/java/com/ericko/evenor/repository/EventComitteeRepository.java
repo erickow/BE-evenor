@@ -21,4 +21,6 @@ public interface EventComitteeRepository extends JpaRepository<EventComittee,UUI
     List<EventComittee> findAllByComittee_NameContaining(String name);
 
     Integer countEventComitteeByEvent(Event event);
+
+    List<EventComittee> findAllByComittee(User user);
 }

@@ -31,6 +31,7 @@ public class Answer {
     @Column
     private Integer total;
 
-    @ManyToMany(targetEntity = EventComittee.class)
+    @ManyToMany(targetEntity = EventComittee.class, cascade = CascadeType.REMOVE)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     private List<EventComittee> comittees;
 }

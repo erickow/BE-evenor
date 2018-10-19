@@ -29,6 +29,9 @@ public class UserServiceImpl implements UserService{
     private EventRepository eventRepository;
 
     @Autowired
+    private JobRepository jobRepository;
+
+    @Autowired
     private VolunteerRepository volunteerRepository;
 
     @Autowired
@@ -76,6 +79,18 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void deleteUser(UUID id) {
+        User user = userRepository.findOne(id);
+        List<Job> jobs = jobRepository.findAllByComittees_Comittee(user);
+        EventComittee comittee = null;
+        for(Job job : jobs){
+            for(EventComittee eventComittee: job.getComittees()){
+               if (user.equals(eventComittee.getComittee())){
+                   comittee = eventComittee;
+               }
+            }
+            job.getComittees().remove(comittee);
+            jobRepository.save(job);
+        }
         userRepository.delete(id);
     }
 

@@ -8,10 +8,7 @@ import sun.net.www.MimeTable;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -70,14 +67,28 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public List<Job> getJobByUserId(UUID id) {
+        User user = userRepository.findOne(id);
+        return jobRepository.findAllByComittees_Comittee(user);
+    }
+
+    @Override
+    public List<JobComment> getJobComment(UUID id) {
+        Job job = jobRepository.findOne(id);
+        return jobCommentRepository.findAllByJob(job);
+    }
+
+    @Override
     public Task createJob(UUID id, Job job) {
         Task task = taskRepository.findOne(id);
-        task.setJobs(Arrays.asList(job));
+        List<Job> listJob = new ArrayList<>();
+        listJob.add(jobRepository.save(job));
+        task.setJobs(listJob);
         return taskRepository.save(task);
     }
 
     @Override
-    public Job updateJob(UUID id, Job job) {
+    public Job updateJob(Job job) {
         return jobRepository.save(job);
     }
 
@@ -96,8 +107,15 @@ public class TaskServiceImpl implements TaskService {
         Job job = jobRepository.findOne(id);
         job.setCompletion(Boolean.valueOf(completion));
         Quest quest;
+        String level = job.getLevel();
         if (job.getEndDate().before(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(String.valueOf(dateCompletion)))){
-            quest = questRepository.findByCode("#ADD_COMPLETION");
+            if(level.equals("easy")){
+                quest = questRepository.findByCode("#ADD_COMPLETION");
+            }else if(level.equals("medium")){
+                quest = questRepository.findByCode("#ADD_COMPLETION");
+            }else{
+                quest = questRepository.findByCode("#ADD_COMPLETION");
+            }
         }else{
             quest = questRepository.findByCode("#ADD_COMPLETION_LATE");
         }
@@ -118,11 +136,10 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Job createJobComment(UUID jobId, UUID userId, String comment, Date date) {
+    public JobComment createJobComment(UUID jobId, UUID userId, String comment, Date date) {
         Job job = jobRepository.findOne(jobId);
         User user = userRepository.findOne(userId);
-        JobComment jobComment = JobComment.builder().comment(comment).date(date).build();
-        job.setComments(Arrays.asList(jobCommentRepository.save(jobComment)));
-        return jobRepository.save(job);
+        JobComment jobComment = JobComment.builder().comment(comment).user(user).job(job).date(date).build();
+        return jobCommentRepository.save(jobComment);
     }
 }

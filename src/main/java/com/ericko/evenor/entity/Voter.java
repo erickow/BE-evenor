@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -23,5 +25,6 @@ public class Voter {
     private UUID id;
 
     @OneToOne(targetEntity = EventComittee.class)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     private EventComittee eventComittee;
 }

@@ -1,6 +1,7 @@
 package com.ericko.evenor.service.task;
 
 import com.ericko.evenor.entity.Job;
+import com.ericko.evenor.entity.JobComment;
 import com.ericko.evenor.entity.Task;
 import org.springframework.validation.annotation.Validated;
 
@@ -25,9 +26,13 @@ public interface TaskService {
 
     Job getJob(UUID id);
 
+    List<Job> getJobByUserId(UUID id);
+
+    List<JobComment> getJobComment(UUID id);
+
     Task createJob(UUID id, Job job);
 
-    Job updateJob(UUID id, Job job);
+    Job updateJob(Job job);
 
     void deleteJob(UUID id);
 
@@ -35,5 +40,5 @@ public interface TaskService {
 
     Job jobCompletion(UUID id, String completion, String dateCompletion) throws ParseException;
 
-    Job createJobComment(UUID jobId, UUID userId, String comment, Date date);
+    JobComment createJobComment(UUID jobId, UUID userId, String comment, Date date);
 }

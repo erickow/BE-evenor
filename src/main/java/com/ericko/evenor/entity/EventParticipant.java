@@ -26,6 +26,7 @@ public class EventParticipant {
     private UUID id;
 
     @ManyToOne(targetEntity = User.class)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User participant;
 
     @ManyToOne(targetEntity = Event.class)

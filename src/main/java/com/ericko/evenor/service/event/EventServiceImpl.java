@@ -116,9 +116,12 @@ public class EventServiceImpl implements EventService {
                             .endDate(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(String.valueOf(endDate)))
                             .photo(imageName)
                             .build();
-        event.setAdminEvent(Arrays.asList(userRepository.findOne(id)));
-        event.setPhoto(imageName);
         User user = userRepository.findOne(id);
+        event.setPhoto(imageName);
+
+        EventComittee eventComittee = EventComittee.builder().comittee(user).score(0).event(event).build();
+        eventComitteeRepository.save(eventComittee);
+
         Quest quest = questRepository.findByCode("#ADD_EVENT");
         user.setExperience(user.getExperience() + quest.getScore());
         return eventRepository.save(event);

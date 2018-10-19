@@ -46,9 +46,11 @@ public class Vote {
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd-MM-yyyy HH:mm:ss")
     private Date endDate;
 
-    @ManyToMany(targetEntity = Answer.class)
+    @ManyToMany(targetEntity = Answer.class, cascade = CascadeType.REMOVE)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     private List<Answer> answers;
 
-    @ManyToOne(targetEntity = Event.class)
+    @ManyToOne(targetEntity = Event.class, cascade = CascadeType.REMOVE)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     private Event event;
 }

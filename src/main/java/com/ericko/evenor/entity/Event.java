@@ -37,6 +37,9 @@ public class Event {
     private String description;
 
     @Column
+    private String category;
+
+    @Column
     private String photo;
 
     @Column
@@ -55,7 +58,4 @@ public class Event {
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd-MM-yyyy HH:mm:ss")
     private Date endDate;
 
-    @ManyToMany(targetEntity = User.class)
-    @OnDelete(action = OnDeleteAction.NO_ACTION)
-    private List<User> adminEvent;
 }

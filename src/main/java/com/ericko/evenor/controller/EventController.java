@@ -3,6 +3,7 @@ package com.ericko.evenor.controller;
 import com.ericko.evenor.entity.Event;
 import com.ericko.evenor.entity.EventComittee;
 import com.ericko.evenor.entity.EventParticipant;
+import com.ericko.evenor.service.activity.ActivityService;
 import com.ericko.evenor.service.event.EventService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -27,6 +28,9 @@ public class EventController {
 
     @Autowired
     private EventService eventService;
+
+    @Autowired
+    private ActivityService activityService;
 
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
@@ -111,7 +115,7 @@ public class EventController {
     }
 
     @PostMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "event data", notes = "create new event")
     public @ResponseBody
     Event createEvent(
@@ -126,32 +130,44 @@ public class EventController {
             HttpServletRequest request, HttpServletResponse response
     ) throws FileFormatException, ParseException {
         Event result = eventService.createEvent(id, name, description, setParticipant, setComittee, startDate, endDate, file);
+        if(result != null){
+            activityService.createActivity("Membuat Event", id, result.getId());
+        }
         return result;
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{idEvent}/{idUser}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "event object", notes = "updating event data by id")
     public @ResponseBody
     Event updateEvent(
+            @ApiParam(value = "the user id")
+            @PathVariable("idUser") UUID idUser,
             @ApiParam(value = "the event id")
-            @PathVariable("id") UUID id,
+            @PathVariable("idEvent") UUID idEvent,
             @RequestBody Event event,
             HttpServletRequest request, HttpServletResponse response
     ) {
-        return eventService.updateEvent(event);
+        Event result = eventService.updateEvent(event);
+        if(result != null){
+            activityService.createActivity("Melakukan update Event", idUser, idEvent);
+        }
+        return result;
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{idEvent}/{idEvent}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "event id" , notes = "delete event by id")
     public @ResponseBody
     void deleteEvent(
+            @ApiParam(value = "the user id")
+            @PathVariable("idUser") UUID idUser,
             @ApiParam(value = "the event id")
-            @PathVariable("id") UUID id,
+            @PathVariable("idEvent") UUID idEvent,
             HttpServletRequest request, HttpServletResponse response
     ) {
-        eventService.deleteEvent(id);
+        eventService.deleteEvent(idEvent);
+        activityService.createActivity("Menghapus Event", idUser, idEvent);
     }
 
 }

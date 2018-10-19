@@ -28,6 +28,7 @@ public class EventComittee {
     private Integer score;
 
     @ManyToOne(targetEntity = User.class)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User comittee;
 
     @ManyToOne(targetEntity = Event.class)
