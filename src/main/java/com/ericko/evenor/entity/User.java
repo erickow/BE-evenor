@@ -1,20 +1,24 @@
 package com.ericko.evenor.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.*;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
+@Builder
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
 
     @Id
@@ -40,27 +44,19 @@ public class User {
     @Column
     private String photo;
 
-    @Column(nullable = false)
+    @Column
     private Boolean active;
 
-    @ManyToMany(targetEntity = Role.class, fetch = FetchType.EAGER)
+    @Column
+    private Integer experience;
+
+    @ManyToMany(targetEntity = Role.class)
+    @LazyCollection(LazyCollectionOption.FALSE)
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     private List<Role> roles;
 
-    public User() {
-    }
-
     public User(UUID id) {
         this.id = id;
-    }
-
-    public User(Boolean active, String name, String email, String password, String photo, List<Role> roles) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.active = active;
-        this.photo = photo;
-        this.roles = roles;
     }
 
     public User(User user) {
@@ -69,6 +65,8 @@ public class User {
         this.email = user.email;
         this.password = user.password;
         this.active = user.active;
+        this.photo = user.photo;
+        this.roles = user.roles;
+        this.experience = user.experience;
     }
-
 }

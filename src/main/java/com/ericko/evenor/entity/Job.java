@@ -1,15 +1,12 @@
 package com.ericko.evenor.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -17,45 +14,37 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 @Builder
-public class Event {
+@Data
+public class Job {
+
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
 
-    @Column(nullable = false)
-    @NotNull
-    @NotBlank
+    @Column
     private String name;
 
-    @Column(nullable = false)
-    @NotBlank
-    @NonNull
+    @Column
+    private Integer position;
+
+    @Column
     private String description;
 
-    @Column
-    private String photo;
-
-    @Column
-    private Boolean setParticipant;
-
-    @Column
-    private Boolean setComittee;
-
-    @Column(nullable = false)
+    @Column(nullable = true)
     @DateTimeFormat
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd-MM-yyyy HH:mm:ss")
     private Date startDate;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     @DateTimeFormat
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd-MM-yyyy HH:mm:ss")
     private Date endDate;
 
-    @ManyToMany(targetEntity = User.class)
+    @ManyToOne(targetEntity = Division.class)
     @OnDelete(action = OnDeleteAction.NO_ACTION)
-    private List<User> adminEvent;
+    private Division division;
+
+    @ManyToMany(targetEntity = JobComment.class)
+    private List<JobComment> comments;
 }

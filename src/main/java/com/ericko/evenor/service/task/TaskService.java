@@ -1,5 +1,6 @@
-package com.ericko.evenor.service.Task;
+package com.ericko.evenor.service.task;
 
+import com.ericko.evenor.entity.Job;
 import com.ericko.evenor.entity.Task;
 import org.springframework.validation.annotation.Validated;
 
@@ -14,9 +15,19 @@ public interface TaskService {
 
     Task getTask(UUID id);
 
-    Task createTask( @Valid Task task);
+    List<Task> getTaskByEvent(UUID id);
+
+    Task createTask(UUID id, @Valid Task task);
 
     Task updateTask( @Valid Task task);
+
+    Job getJob(UUID id);
+
+    Task createJob(UUID id, Job job);
+
+    Job updateJob(UUID id, Job job);
+
+    void deleteJob(UUID id);
 
     void deleteTask(UUID id);
 }

@@ -1,7 +1,10 @@
 package com.ericko.evenor.service.user;
 
+import com.ericko.evenor.entity.EventComittee;
 import com.ericko.evenor.entity.User;
+import org.apache.xmlbeans.impl.piccolo.io.FileFormatException;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -13,12 +16,17 @@ public interface UserService {
 
     User getUser(UUID id);
 
+    User getUserByEmail(String email);
+
     User createUser( @Valid User user);
 
     User updateUser( @Valid User user);
 
     void deleteUser(UUID id);
 
+    EventComittee getComittee(UUID userId, UUID eventId);
+
     List<User> searchByName(String name);
 
+    User uploadPhoto(UUID id, MultipartFile file) throws FileFormatException;
 }

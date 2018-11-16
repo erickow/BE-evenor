@@ -1,7 +1,10 @@
 package com.ericko.evenor.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -14,48 +17,38 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+@Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 @Builder
-public class Event {
+public class Vote {
+
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
 
-    @Column(nullable = false)
+    @Column
     @NotNull
     @NotBlank
-    private String name;
+    private String title;
 
-    @Column(nullable = false)
-    @NotBlank
-    @NonNull
+    @Column
     private String description;
 
     @Column
-    private String photo;
+    private Integer totalVoter;
 
     @Column
-    private Boolean setParticipant;
-
-    @Column
-    private Boolean setComittee;
-
-    @Column(nullable = false)
-    @DateTimeFormat
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd-MM-yyyy HH:mm:ss")
-    private Date startDate;
-
-    @Column(nullable = false)
     @DateTimeFormat
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd-MM-yyyy HH:mm:ss")
     private Date endDate;
 
-    @ManyToMany(targetEntity = User.class)
-    @OnDelete(action = OnDeleteAction.NO_ACTION)
-    private List<User> adminEvent;
+    @OneToMany(targetEntity = Answer.class)
+    private List<Answer> answers;
+
+    @ManyToOne(targetEntity = Event.class)
+    private Event event;
 }
