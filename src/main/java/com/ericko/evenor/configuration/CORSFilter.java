@@ -39,12 +39,8 @@ public class CORSFilter implements Filter
     }
 
     @Override
-    public void init(FilterConfig config) throws ServletException{
-        //DoNoting
-    }
+    public void init(FilterConfig config) throws ServletException{}
 
     @Override
-    public void destroy(){
-        //Do Noting
-    }
+    public void destroy(){}
 }

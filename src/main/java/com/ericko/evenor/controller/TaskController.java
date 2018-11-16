@@ -1,8 +1,7 @@
 package com.ericko.evenor.controller;
 
-import com.ericko.evenor.entity.Job;
 import com.ericko.evenor.entity.Task;
-import com.ericko.evenor.service.task.TaskService;
+import com.ericko.evenor.service.Task.TaskService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,44 +45,16 @@ public class TaskController {
         return result;
     }
 
-    @GetMapping("/event/{id}")
+    @PostMapping("/")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "get task by id", notes = "the task is search by id")
-    public @ResponseBody
-    List<Task> getTaskByEvent(
-            @ApiParam(value = "the id of event")
-            @PathVariable UUID id,
-            HttpServletRequest request, HttpServletResponse response
-    ) {
-       List<Task> result = taskService.getTaskByEvent(id);
-        checkResourceFound(result);
-        return result;
-    }
-
-    @PostMapping("/event/{id}")
-    @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "task object", notes = "create new task")
     public @ResponseBody
     Task createTask(
-            @ApiParam(value = "the id of event")
-            @PathVariable("id") UUID id,
             @RequestBody Task task,
             HttpServletRequest request, HttpServletResponse response
     ) {
-        return checkResourceFound(taskService.createTask(id, task));
-    }
-
-    @PostMapping("/job/{id}")
-    @ResponseStatus(HttpStatus.CREATED)
-    @ApiOperation(value = "job object", notes = "create new job")
-    public @ResponseBody
-    Task createJob(
-            @ApiParam(value = "the id of task")
-            @PathVariable("id") UUID id,
-            @RequestBody Job job,
-            HttpServletRequest request, HttpServletResponse response
-    ) {
-        return checkResourceFound(taskService.createJob(id, job));
+        Task result = taskService.createTask(task);
+        return result;
     }
 
     @PutMapping("/{id}")
@@ -108,19 +79,5 @@ public class TaskController {
             HttpServletRequest request, HttpServletResponse response
     ) {
         taskService.deleteTask(id);
-    }
-
-    @GetMapping("/job/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "get job by id", notes = "the job is search by id")
-    public @ResponseBody
-    Job getJob(
-            @ApiParam(value = "the id of job")
-            @PathVariable UUID id,
-            HttpServletRequest request, HttpServletResponse response
-    ) {
-        Job result = taskService.getJob(id);
-        checkResourceFound(result);
-        return result;
     }
 }

@@ -33,6 +33,7 @@ public class ResponseHandler implements ApplicationEventPublisherAware {
     public
     @ResponseBody
     ResponseWrapper handleDataStoreException(DataFormatException ex, WebRequest request, HttpServletResponse response) {
+        //log.info("Converting Data Store exception to RestResponse : " + ex.getMessage());
 
         return new ResponseWrapper(ex, "You messed up.");
     }
@@ -42,6 +43,7 @@ public class ResponseHandler implements ApplicationEventPublisherAware {
     public
     @ResponseBody
     ResponseWrapper handleResourceNotFoundException(ResourceNotFoundException ex, WebRequest request, HttpServletResponse response) {
+        // log.info("ResourceNotFoundException handler:" + ex.getMessage());
 
         return new ResponseWrapper(ex, "Sorry I couldn't find it.");
     }
